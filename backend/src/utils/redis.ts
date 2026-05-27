@@ -11,7 +11,6 @@ export async function connectRedis(): Promise<void> {
     url: process.env.REDIS_URL,
 
     socket: {
-      tls: true,
       reconnectStrategy: (retries) => Math.min(retries * 50, 2000),
       connectTimeout: 10000,
     },

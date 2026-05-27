@@ -13,7 +13,6 @@ export async function connectRedis(): Promise<void> {
     socket: {
       tls: true,
       reconnectStrategy: (retries) => Math.min(retries * 50, 2000),
-      keepAlive: 5000,
       connectTimeout: 10000,
     },
   }) as RedisClientType;

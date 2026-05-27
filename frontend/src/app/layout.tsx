@@ -1,19 +1,30 @@
-import type { Metadata } from 'next';
-import './globals.css';
-import { Toaster } from '@/components/ui/toaster';
+import type { Metadata } from 'next'
+import './globals.css'
+import { Toaster } from '@/components/ui/toaster'
+import { AppShell } from '@/components/layout/app-shell'
 
 export const metadata: Metadata = {
-  title: 'Examify - AI Assessment Creator',
+  title: 'VedaAI – AI Assessment Creator',
   description: 'Generate professional exam papers with AI',
-};
+}
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="font-sans antialiased bg-zinc-50">
-        {children}
+      <body className="antialiased bg-[hsl(48,20%,97%)]">
+        {/*
+          AppShell is a 'use client' component that renders:
+          - Desktop: fixed 220px sidebar + topbar + scrollable main
+          - Mobile: topbar + scrollable main + bottom nav
+          All route segments render as {children} inside main.
+        */}
+        <AppShell>{children}</AppShell>
         <Toaster />
       </body>
     </html>
-  );
+  )
 }

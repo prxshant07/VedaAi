@@ -1,275 +1,84 @@
 import Link from 'next/link'
-
-import {
-  ArrowRight,
-  Clock3,
-  FileText,
-  Sparkles,
-} from 'lucide-react'
-
+import { MoreVertical, Calendar, Clock3 } from 'lucide-react'
 import { Assignment } from '@/types'
-
-import {
-  formatDate,
-  STATUS_COLORS,
-  QUESTION_TYPE_LABELS,
-} from '@/lib/utils'
+import { formatDate, STATUS_COLORS, QUESTION_TYPE_LABELS } from '@/lib/utils'
 
 interface AssignmentCardProps {
   assignment: Assignment
   compact?: boolean
 }
 
-export function AssignmentCard({
-  assignment,
-  compact = false,
-}: AssignmentCardProps) {
-  const diffColors = {
-    easy: '#4ade80',
-    medium: '#facc15',
-    hard: '#f87171',
-  }
+const FIGMA_STATUS: Record<string, { dot: string; bg: string; text: string; label: string }> = {
+  completed: { dot: '●', bg: 'bg-[#EBF7F0]', text: 'text-[#1A7A47]', label: 'Active' },
+  draft:     { dot: '○', bg: 'bg-[#FEF9E7]', text: 'text-[#A07800]', label: 'Draft' },
+  queued:    { dot: '◌', bg: 'bg-[#EFF6FF]', text: 'text-[#1E5FAD]', label: 'Queued' },
+  processing:{ dot: '◌', bg: 'bg-[#F3F0FF]', text: 'text-[#5B2DA6]', label: 'Processing' },
+  failed:    { dot: '✕', bg: 'bg-[#FEF0ED]', text: 'text-[#B83F20]', label: 'Failed' },
+}
+
+export function AssignmentCard({ assignment, compact = false }: AssignmentCardProps) {
+  const st = FIGMA_STATUS[assignment.status] ?? FIGMA_STATUS.draft
 
   return (
-    <Link
-      href={`/assessments/${assignment._id}`}
-      className="block group"
-    >
-      <div
-        className="
-          relative
-          overflow-hidden
-          rounded-[28px]
-          border
-          border-border
-          bg-white
-          p-5
-          shadow-card
-          transition-all
-          duration-300
-          hover:-translate-y-1
-        "
-      >
-        {/* Glow */}
-        <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-violet-100/40 blur-3xl transition-all duration-500 group-hover:scale-125" />
+    <Link href={`/assessments/${assignment._id}`} className="block group">
+      <div className="relative bg-white border border-[#E5E5E2] rounded-[14px] p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:-translate-y-[1px]">
 
-        <div className="relative z-10">
-          {/* Top */}
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0 flex-1">
-              <h3
-                className="
-                  line-clamp-2
-                  text-xl
-                  font-semibold
-                  leading-snug
-                  text-textPrimary
-                  transition-colors
-                  group-hover:text-violet-700
-                "
-              >
-                {assignment.title}
-              </h3>
+        {/* Header */}
+        <div className="flex items-start justify-between gap-2 mb-3">
+          <h3 className="text-[14.5px] font-semibold text-[hsl(222,47%,11%)] leading-snug line-clamp-2 flex-1">
+            {assignment.title}
+          </h3>
+          <button
+            onClick={(e) => e.preventDefault()}
+            className="flex h-7 w-7 items-center justify-center rounded-lg text-[hsl(215,16%,55%)] hover:bg-[hsl(48,20%,96%)] transition-colors flex-shrink-0"
+          >
+            <MoreVertical size={15} />
+          </button>
+        </div>
 
-              {assignment.subject && (
-                <p className="mt-2 text-sm text-textSecondary">
-                  {assignment.subject}
-                </p>
-              )}
+        {/* Subject */}
+        {assignment.subject && (
+          <p className="text-[12.5px] text-[hsl(215,16%,47%)] mb-3">
+            {assignment.subject}
+          </p>
+        )}
+
+        {!compact && (
+          <>
+            {/* Date rows */}
+            <div className="space-y-1.5 mb-3">
+              <div className="flex items-center gap-1.5 text-[12.5px] text-[hsl(215,16%,47%)]">
+                <Calendar size={13} className="text-[hsl(215,16%,60%)]" />
+                <span>Assignment: {formatDate(assignment.createdAt)}</span>
+              </div>
             </div>
 
-            <span
-              className={`
-                rounded-full
-                px-3
-                py-1
-                text-xs
-                font-semibold
-                capitalize
-                flex-shrink-0
-                ${STATUS_COLORS[assignment.status]}
-              `}
-            >
-              {assignment.status}
-            </span>
-          </div>
-
-          {!compact && (
-            <>
-              {/* Stats */}
-              <div className="mt-6 grid grid-cols-2 gap-4">
-                <div className="rounded-2xl bg-muted/40 p-3">
-                  <div className="flex items-center gap-2 text-textSecondary">
-                    <FileText size={16} />
-
-                    <span className="text-xs font-medium">
-                      Questions
-                    </span>
-                  </div>
-
-                  <p className="mt-2 text-lg font-semibold text-textPrimary">
-                    {assignment.totalQuestions}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl bg-muted/40 p-3">
-                  <div className="flex items-center gap-2 text-textSecondary">
-                    <Clock3 size={16} />
-
-                    <span className="text-xs font-medium">
-                      Marks
-                    </span>
-                  </div>
-
-                  <p className="mt-2 text-lg font-semibold text-textPrimary">
-                    {assignment.totalMarks}
-                  </p>
-                </div>
-              </div>
-
-              {/* Due Date */}
-              <div className="mt-5 flex items-center justify-between">
-                <span className="text-sm text-textSecondary">
-                  Due Date
-                </span>
-
-                <span className="text-sm font-medium text-textPrimary">
-                  {formatDate(
-                    assignment.dueDate
-                  )}
-                </span>
-              </div>
-
-              {/* Question Types */}
-              <div className="mt-5 flex flex-wrap gap-2">
-                {assignment.questionTypes.map(
-                  (type) => (
-                    <span
-                      key={type}
-                      className="
-                        rounded-full
-                        bg-violet-50
-                        px-3
-                        py-1
-                        text-xs
-                        font-medium
-                        text-violet-700
-                      "
-                    >
-                      {
-                        QUESTION_TYPE_LABELS[
-                          type
-                        ]
-                      }
-                    </span>
-                  )
-                )}
-              </div>
-
-              {/* Difficulty */}
-              <div className="mt-5">
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-sm text-textSecondary">
-                    Difficulty Distribution
+            {/* Question types */}
+            {assignment.questionTypes?.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mb-3">
+                {assignment.questionTypes.slice(0, 3).map((type) => (
+                  <span key={type} className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-[hsl(48,20%,96%)] text-[hsl(215,16%,40%)] border border-[hsl(220,13%,90%)]">
+                    {QUESTION_TYPE_LABELS[type]}
                   </span>
-                </div>
-
-                <div className="flex gap-1 overflow-hidden rounded-full">
-                  {(
-                    [
-                      'easy',
-                      'medium',
-                      'hard',
-                    ] as const
-                  ).map((level) => {
-                    const pct =
-                      assignment
-                        .difficultyDistribution?.[
-                        level
-                      ] ?? 0
-
-                    return pct > 0 ? (
-                      <div
-                        key={level}
-                        className="h-2 rounded-full transition-all"
-                        style={{
-                          flex: pct,
-                          background:
-                            diffColors[
-                              level
-                            ],
-                          minWidth: 8,
-                        }}
-                        title={`${level}: ${pct}%`}
-                      />
-                    ) : null
-                  })}
-                </div>
-
-                <div className="mt-3 flex flex-wrap gap-3 text-xs text-textSecondary">
-                  <span>
-                    Easy{' '}
-                    {assignment
-                      .difficultyDistribution
-                      ?.easy ?? 0}
-                    %
-                  </span>
-
-                  <span>
-                    Medium{' '}
-                    {assignment
-                      .difficultyDistribution
-                      ?.medium ?? 0}
-                    %
-                  </span>
-
-                  <span>
-                    Hard{' '}
-                    {assignment
-                      .difficultyDistribution
-                      ?.hard ?? 0}
-                    %
-                  </span>
-                </div>
+                ))}
               </div>
-            </>
-          )}
+            )}
+          </>
+        )}
 
-          {/* Footer */}
-          <div className="mt-6 flex items-center justify-between border-t border-border pt-5">
-            <div className="flex items-center gap-2 text-textSecondary">
-              <Sparkles size={14} />
-
-              <span className="text-xs">
-                Created{' '}
-                {formatDate(
-                  assignment.createdAt
-                )}
-              </span>
-            </div>
-
-            <div
-              className="
-                inline-flex
-                items-center
-                gap-2
-                rounded-2xl
-                bg-violet-600
-                px-4
-                py-3
-                text-sm
-                font-medium
-                text-white
-                transition-all
-                group-hover:bg-violet-700
-              "
-            >
-              Open
-
-              <ArrowRight size={16} />
+        {/* Footer */}
+        <div className="flex items-center justify-between pt-3 border-t border-[#F0EFE8]">
+          <span className={`inline-flex items-center gap-1 text-[11.5px] font-semibold px-2.5 py-1 rounded-full ${st.bg} ${st.text}`}>
+            {st.dot} {st.label}
+          </span>
+          <div className="text-right">
+            <div className="text-[11px] text-[hsl(215,16%,60%)]">Due</div>
+            <div className="text-[12.5px] font-semibold text-[hsl(215,16%,40%)]">
+              {formatDate(assignment.dueDate)}
             </div>
           </div>
         </div>
+
       </div>
     </Link>
   )

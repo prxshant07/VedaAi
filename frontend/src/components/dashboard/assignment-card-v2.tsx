@@ -1,13 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-
-import {
-  Clock3,
-  FileText,
-  ArrowUpRight,
-  MoreHorizontal,
-} from 'lucide-react'
+import { MoreHorizontal, FileText, Clock3, ArrowRight } from 'lucide-react'
 
 interface AssignmentCardV2Props {
   id?: string
@@ -21,6 +15,12 @@ interface AssignmentCardV2Props {
   createdAt?: string
 }
 
+const statusStyles = {
+  active:    { bg: 'bg-[#EBF7F0]', text: 'text-[#1A7A47]', label: '● Active' },
+  draft:     { bg: 'bg-[#FEF9E7]', text: 'text-[#A07800]', label: '○ Draft' },
+  completed: { bg: 'bg-[#EBF7F0]', text: 'text-[#1A7A47]', label: '✓ Completed' },
+}
+
 export function AssignmentCardV2({
   id,
   title,
@@ -32,193 +32,76 @@ export function AssignmentCardV2({
   progress = 72,
   createdAt,
 }: AssignmentCardV2Props) {
-  const statusStyles = {
-    active:
-      'bg-emerald-50 text-emerald-600',
-
-    draft:
-      'bg-amber-50 text-amber-600',
-
-    completed:
-      'bg-violet-50 text-violet-700',
-  }
+  const st = statusStyles[status]
 
   return (
-    <div
-      className="
-        group
-        relative
-        overflow-hidden
-        rounded-[28px]
-        border
-        border-border
-        bg-white
-        p-5
-        shadow-card
-        transition-all
-        duration-300
-        hover:-translate-y-1
-      "
-    >
-      {/* Background Glow */}
-      <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-violet-100/40 blur-3xl transition-all duration-500 group-hover:scale-125" />
+    <div className="group relative bg-white border border-[#E5E5E2] rounded-[14px] p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:-translate-y-[1px]">
 
-      {/* Content */}
-      <div className="relative z-10">
-        {/* Top Row */}
-        <div className="flex items-start justify-between gap-4">
-          <div
-            className={`
-              rounded-full
-              px-3
-              py-1
-              text-xs
-              font-semibold
-              capitalize
-              ${statusStyles[status]}
-            `}
-          >
-            {status}
+      {/* Top */}
+      <div className="flex items-start justify-between gap-2 mb-4">
+        <span className={`text-[11.5px] font-semibold px-2.5 py-1 rounded-full ${st.bg} ${st.text}`}>
+          {st.label}
+        </span>
+        <button className="flex h-7 w-7 items-center justify-center rounded-lg text-[hsl(215,16%,55%)] hover:bg-[hsl(48,20%,96%)] transition-colors">
+          <MoreHorizontal size={15} />
+        </button>
+      </div>
+
+      {/* Title */}
+      <h3 className="text-[14.5px] font-semibold text-[hsl(222,47%,11%)] leading-snug line-clamp-2 mb-1">{title}</h3>
+      <p className="text-[12.5px] text-[hsl(215,16%,47%)] mb-4">{subject}</p>
+
+      {/* Meta grid */}
+      <div className="grid grid-cols-2 gap-3 mb-4">
+        <div className="rounded-xl bg-[hsl(48,20%,97%)] border border-[hsl(220,13%,92%)] p-2.5">
+          <div className="flex items-center gap-1.5 text-[hsl(215,16%,55%)] mb-1.5">
+            <FileText size={13} />
+            <span className="text-[11.5px] font-medium">Questions</span>
           </div>
-
-          <button
-            className="
-              flex
-              h-10
-              w-10
-              items-center
-              justify-center
-              rounded-xl
-              text-textSecondary
-              transition-all
-              hover:bg-muted
-            "
-          >
-            <MoreHorizontal size={18} />
-          </button>
+          <p className="text-[15px] font-bold text-[hsl(222,47%,11%)]">{questions}</p>
         </div>
-
-        {/* Title */}
-        <div className="mt-5">
-          <h3 className="line-clamp-2 text-xl font-semibold leading-snug text-textPrimary">
-            {title}
-          </h3>
-
-          <p className="mt-2 text-sm text-textSecondary">
-            {subject}
-          </p>
-        </div>
-
-        {/* Meta */}
-        <div className="mt-6 grid grid-cols-2 gap-4">
-          <div className="rounded-2xl bg-muted/40 p-3">
-            <div className="flex items-center gap-2 text-textSecondary">
-              <FileText size={16} />
-
-              <span className="text-xs font-medium">
-                Questions
-              </span>
-            </div>
-
-            <p className="mt-2 text-lg font-semibold text-textPrimary">
-              {questions}
-            </p>
+        <div className="rounded-xl bg-[hsl(48,20%,97%)] border border-[hsl(220,13%,92%)] p-2.5">
+          <div className="flex items-center gap-1.5 text-[hsl(215,16%,55%)] mb-1.5">
+            <Clock3 size={13} />
+            <span className="text-[11.5px] font-medium">Duration</span>
           </div>
-
-          <div className="rounded-2xl bg-muted/40 p-3">
-            <div className="flex items-center gap-2 text-textSecondary">
-              <Clock3 size={16} />
-
-              <span className="text-xs font-medium">
-                Duration
-              </span>
-            </div>
-
-            <p className="mt-2 text-lg font-semibold text-textPrimary">
-              {duration}
-            </p>
-          </div>
-        </div>
-
-        {/* Difficulty */}
-        <div className="mt-5 flex items-center justify-between">
-          <span className="text-sm text-textSecondary">
-            Difficulty
-          </span>
-
-          <span className="rounded-full bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-700">
-            {difficulty}
-          </span>
-        </div>
-
-        {/* Progress */}
-        <div className="mt-5">
-          <div className="mb-2 flex items-center justify-between">
-            <span className="text-sm text-textSecondary">
-              Completion
-            </span>
-
-            <span className="text-sm font-semibold text-textPrimary">
-              {progress}%
-            </span>
-          </div>
-
-          <div className="h-2 overflow-hidden rounded-full bg-muted">
-            <div
-              className="
-                h-full
-                rounded-full
-                bg-gradient-to-r
-                from-violet-500
-                to-violet-700
-                transition-all
-                duration-500
-              "
-              style={{
-                width: `${progress}%`,
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="mt-6 flex items-center justify-between">
-          <div>
-            {createdAt && (
-              <p className="text-xs text-textSecondary">
-                Created {createdAt}
-              </p>
-            )}
-          </div>
-
-          <Link
-            href={
-              id
-                ? `/assignments/${id}`
-                : '#'
-            }
-            className="
-              inline-flex
-              items-center
-              gap-2
-              rounded-2xl
-              bg-violet-600
-              px-4
-              py-3
-              text-sm
-              font-medium
-              text-white
-              transition-all
-              hover:bg-violet-700
-              hover:scale-[1.02]
-            "
-          >
-            Open
-
-            <ArrowUpRight size={16} />
-          </Link>
+          <p className="text-[15px] font-bold text-[hsl(222,47%,11%)]">{duration}</p>
         </div>
       </div>
+
+      {/* Difficulty */}
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-[12.5px] text-[hsl(215,16%,47%)]">Difficulty</span>
+        <span className="text-[11.5px] font-semibold px-2.5 py-0.5 rounded-full bg-[hsl(48,20%,96%)] text-[hsl(222,47%,30%)] border border-[hsl(220,13%,90%)]">
+          {difficulty}
+        </span>
+      </div>
+
+      {/* Progress */}
+      <div className="mb-4">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-[12px] text-[hsl(215,16%,47%)]">Completion</span>
+          <span className="text-[12px] font-semibold text-[hsl(222,47%,11%)]">{progress}%</span>
+        </div>
+        <div className="h-1.5 overflow-hidden rounded-full bg-[hsl(48,20%,94%)]">
+          <div
+            className="h-full rounded-full bg-[hsl(222,47%,11%)] transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="flex items-center justify-between pt-3 border-t border-[#F0EFE8]">
+        {createdAt && <p className="text-[11.5px] text-[hsl(215,16%,55%)]">Created {createdAt}</p>}
+        <Link
+          href={id ? `/assignments/${id}` : '#'}
+          className="ml-auto flex items-center gap-1.5 rounded-xl bg-[hsl(222,47%,11%)] px-3.5 py-2 text-[12.5px] font-semibold text-white hover:opacity-90 transition-opacity"
+        >
+          Open <ArrowRight size={14} />
+        </Link>
+      </div>
+
     </div>
   )
 }

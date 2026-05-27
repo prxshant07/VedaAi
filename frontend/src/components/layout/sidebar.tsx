@@ -2,173 +2,142 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-
 import {
-  LayoutDashboard,
+  Home,
+  Users,
   FileText,
-  Sparkles,
-  BarChart3,
+  BookOpen,
+  Heart,
   Settings,
   Plus,
-  ChevronRight,
 } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
-import clsx from 'clsx'
+const navItems = [
+  { href: '/', label: 'Home', icon: Home },
+  { href: '/groups', label: 'My Groups', icon: Users },
+  { href: '/assignments', label: 'Assignments', icon: FileText, badge: true },
+  { href: '/toolkit', label: "All Teachers' Toolkit", icon: BookOpen },
+  { href: '/library', label: 'My Library', icon: Heart },
+]
 
-const navigationItems = [
-  {
-    label: 'Dashboard',
-    href: '/',
-    icon: LayoutDashboard,
-  },
-  {
-    label: 'Assignments',
-    href: '/assignments',
-    icon: FileText,
-  },
-  {
-    label: 'Generate',
-    href: '/generate',
-    icon: Sparkles,
-  },
-  {
-    label: 'Analytics',
-    href: '/analytics',
-    icon: BarChart3,
-  },
-  {
-    label: 'Settings',
-    href: '/settings',
-    icon: Settings,
-  },
+const bottomItems = [
+  { href: '/settings', label: 'Settings', icon: Settings },
 ]
 
 export function Sidebar() {
   const pathname = usePathname()
 
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/'
+    return pathname.startsWith(href)
+  }
+
   return (
     <aside className="h-full">
-      <div className="flex h-full flex-col rounded-[32px] border border-border bg-white shadow-sidebar">
-        {/* Logo */}
-        <div className="px-6 pt-7 pb-6">
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600 text-white shadow-floating">
-              <Sparkles size={22} />
-            </div>
+      <div className="flex h-full flex-col bg-white border-r border-border">
 
-            <div>
-              <h1 className="text-xl font-bold text-textPrimary">
-                VedaAI
-              </h1>
+        {/* Logo Section */}
+        <div className="flex items-center gap-2 px-5 py-4 border-b border-border w-[251px] h-[72px]">
 
-              <p className="text-xs text-textSecondary">
-                Assessment Creator
-              </p>
-            </div>
+          {/* Logo Icon */}
+          <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 via-amber-600 to-stone-800 shadow-sm flex-none">
+
+            {/* White V */}
+            <span className="text-white text-[18px] font-extrabold leading-none">
+            V
+            </span>
+          </div>
+
+            {/* Brand Text */}
+            <div className="flex items-center h-10">
+              <span className="font-['Bricolage_Grotesque'] text-[28px] font-bold leading-[20px] tracking-[-0.06em] text-[#1B1D21]">
+              VedaAI
+            </span>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="mx-6 h-px bg-border" />
+        {/* Create Assignment CTA */}
+        <div className="px-4 py-3">
+          <Link
+            href="/assignments/create"
+            className="flex items-center gap-2 w-full rounded-xl bg-[hsl(222,47%,11%)] text-white px-4 py-2.5 text-[13px] font-semibold hover:opacity-90 transition-opacity"
+          >
+            <Plus size={15} strokeWidth={2.5} />
+            Create Assignment
+          </Link>
+        </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 px-4 py-6">
-          <div className="space-y-2">
-            {navigationItems.map((item) => {
-              const Icon = item.icon
-
-              const isActive =
-                pathname === item.href
-
-              return (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className={clsx(
-                    'group flex items-center justify-between rounded-2xl px-4 py-3 transition-all duration-200',
-
-                    isActive
-                      ? 'bg-violet-600 text-white shadow-lg'
-                      : 'text-textSecondary hover:bg-violet-50 hover:text-violet-700'
+        {/* Nav */}
+        <nav className="flex-1 px-3 py-2 space-y-0.5">
+          {navItems.map((item) => {
+            const Icon = item.icon
+            const active = isActive(item.href)
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  'group flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13.5px] font-medium transition-all duration-150 border-l-[2.5px]',
+                  active
+                    ? 'bg-[hsl(45,100%,54%)]/12 text-[hsl(222,47%,11%)] border-[hsl(45,100%,54%)]'
+                    : 'text-[hsl(215,16%,47%)] hover:bg-[hsl(48,20%,96%)] hover:text-[hsl(222,47%,11%)] border-transparent'
+                )}
+              >
+                <Icon
+                  size={16}
+                  className={cn(
+                    'flex-shrink-0 transition-colors',
+                    active ? 'text-[hsl(222,47%,11%)]' : 'text-[hsl(215,16%,55%)] group-hover:text-[hsl(222,47%,11%)]'
                   )}
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={clsx(
-                        'flex h-10 w-10 items-center justify-center rounded-xl transition-all',
-
-                        isActive
-                          ? 'bg-white/15'
-                          : 'bg-transparent group-hover:bg-white'
-                      )}
-                    >
-                      <Icon size={20} />
-                    </div>
-
-                    <span className="font-medium">
-                      {item.label}
-                    </span>
-                  </div>
-
-                  {isActive && (
-                    <ChevronRight
-                      size={18}
-                      className="opacity-80"
-                    />
-                  )}
-                </Link>
-              )
-            })}
-          </div>
+                />
+                <span className="flex-1">{item.label}</span>
+                {item.badge && (
+                  <span className="ml-auto text-[10px] font-semibold bg-[hsl(14,100%,50%)] text-white px-1.5 py-0.5 rounded-full leading-tight">
+                    6
+                  </span>
+                )}
+              </Link>
+            )
+          })}
         </nav>
 
-        {/* CTA Card */}
-        <div className="p-4">
-          <div className="overflow-hidden rounded-[28px] bg-gradient-to-br from-violet-600 to-violet-700 p-5 text-white relative">
-            {/* Background Glow */}
-            <div className="absolute -top-10 -right-10 h-28 w-28 rounded-full bg-white/10 blur-2xl" />
-
-            <div className="relative z-10">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-sm">
-                <Plus size={22} />
-              </div>
-
-              <h3 className="mt-5 text-lg font-semibold leading-snug">
-                Create New Assessment
-              </h3>
-
-              <p className="mt-2 text-sm text-violet-100 leading-relaxed">
-                Generate AI-powered question papers instantly.
-              </p>
-
+        {/* Bottom nav */}
+        <div className="px-3 py-2 space-y-0.5">
+          {bottomItems.map((item) => {
+            const Icon = item.icon
+            const active = isActive(item.href)
+            return (
               <Link
-                href="/generate"
-                className="mt-5 inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-violet-700 transition-all hover:scale-[1.02]"
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  'flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13.5px] font-medium transition-all duration-150 border-l-[2.5px]',
+                  active
+                    ? 'bg-[hsl(45,100%,54%)]/12 text-[hsl(222,47%,11%)] border-[hsl(45,100%,54%)]'
+                    : 'text-[hsl(215,16%,47%)] hover:bg-[hsl(48,20%,96%)] hover:text-[hsl(222,47%,11%)] border-transparent'
+                )}
               >
-                Start Generating
+                <Icon size={16} className="flex-shrink-0" />
+                {item.label}
               </Link>
+            )
+          })}
+        </div>
+
+        {/* School card */}
+        <div className="p-3 border-t border-border">
+          <div className="flex items-center gap-2.5 rounded-xl bg-[hsl(48,20%,96%)] border border-border px-3 py-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[hsl(222,47%,11%)] text-[hsl(45,100%,54%)] text-[11px] font-bold flex-shrink-0">
+              DP
+            </div>
+            <div className="min-w-0">
+              <p className="text-[12.5px] font-semibold text-[hsl(222,47%,11%)] truncate">Delhi Public School</p>
+              <p className="text-[11px] text-[hsl(215,16%,55%)] truncate">Bokaro, Bihar City</p>
             </div>
           </div>
         </div>
 
-        {/* User Profile */}
-        <div className="border-t border-border p-4">
-          <div className="flex items-center gap-3 rounded-2xl bg-muted/40 p-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600 text-sm font-semibold text-white">
-              A
-            </div>
-
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold text-textPrimary">
-                Admin User
-              </p>
-
-              <p className="truncate text-xs text-textSecondary">
-                admin@vedaai.com
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     </aside>
   )

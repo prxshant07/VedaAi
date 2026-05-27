@@ -1,5 +1,2 @@
-'use client';
-
-export function Toaster() {
-  return null;
-}
+'use client'
+export function Toaster() { return null }

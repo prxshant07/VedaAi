@@ -1,142 +1,34 @@
 import Link from 'next/link'
-
-import {
-  Sparkles,
-  ArrowRight,
-} from 'lucide-react'
+import { FileText, ArrowRight } from 'lucide-react'
 
 interface EmptyStateProps {
   icon?: React.ReactNode
-
   title: string
-
   description?: string
-
   actionLabel?: string
-
   actionHref?: string
-
   onAction?: () => void
 }
 
-export function EmptyState({
-  icon,
-  title,
-  description,
-  actionLabel,
-  actionHref,
-  onAction,
-}: EmptyStateProps) {
+export function EmptyState({ icon, title, description, actionLabel, actionHref, onAction }: EmptyStateProps) {
   return (
-    <div
-      className="
-        relative
-        overflow-hidden
-        rounded-[32px]
-        border
-        border-border
-        bg-white
-        px-6
-        py-16
-        text-center
-        shadow-card
-      "
-    >
-      {/* Glow */}
-      <div className="absolute left-1/2 top-0 h-52 w-52 -translate-x-1/2 rounded-full bg-violet-100/40 blur-3xl" />
-
-      <div className="relative z-10 mx-auto max-w-md">
-        {/* Icon */}
-        <div
-          className="
-            mx-auto
-            flex
-            h-24
-            w-24
-            items-center
-            justify-center
-            rounded-[28px]
-            bg-violet-50
-            text-violet-600
-            shadow-sm
-          "
-        >
-          {icon ?? (
-            <Sparkles size={42} />
-          )}
+    <div className="relative overflow-hidden rounded-[14px] border border-[#E5E5E2] bg-white px-6 py-16 text-center shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+      <div className="relative z-10 mx-auto max-w-sm">
+        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[20px] bg-[hsl(48,20%,96%)] border border-[#E5E5E2] text-[hsl(215,16%,55%)]">
+          {icon ?? <FileText size={36} />}
         </div>
-
-        {/* Title */}
-        <h3 className="mt-8 text-2xl font-bold tracking-tight text-textPrimary">
-          {title}
-        </h3>
-
-        {/* Description */}
-        {description && (
-          <p className="mt-4 text-base leading-relaxed text-textSecondary">
-            {description}
-          </p>
+        <h3 className="text-[18px] font-bold text-[hsl(222,47%,11%)] mb-2">{title}</h3>
+        {description && <p className="text-[13.5px] leading-relaxed text-[hsl(215,16%,47%)] mb-6">{description}</p>}
+        {actionLabel && actionHref && (
+          <Link href={actionHref} className="inline-flex items-center gap-2 rounded-xl bg-[hsl(222,47%,11%)] px-5 py-2.5 text-[13px] font-semibold text-white transition-all hover:opacity-90">
+            {actionLabel} <ArrowRight size={14} />
+          </Link>
         )}
-
-        {/* Action Link */}
-        {actionLabel &&
-          actionHref && (
-            <Link
-              href={actionHref}
-              className="
-                mt-8
-                inline-flex
-                items-center
-                gap-2
-                rounded-2xl
-                bg-violet-600
-                px-6
-                py-4
-                text-sm
-                font-semibold
-                text-white
-                shadow-lg
-                shadow-violet-500/20
-                transition-all
-                hover:scale-[1.02]
-                hover:bg-violet-700
-              "
-            >
-              {actionLabel}
-
-              <ArrowRight size={16} />
-            </Link>
-          )}
-
-        {/* Action Button */}
-        {actionLabel &&
-          onAction && (
-            <button
-              onClick={onAction}
-              className="
-                mt-8
-                inline-flex
-                items-center
-                gap-2
-                rounded-2xl
-                bg-violet-600
-                px-6
-                py-4
-                text-sm
-                font-semibold
-                text-white
-                shadow-lg
-                shadow-violet-500/20
-                transition-all
-                hover:scale-[1.02]
-                hover:bg-violet-700
-              "
-            >
-              {actionLabel}
-
-              <ArrowRight size={16} />
-            </button>
-          )}
+        {actionLabel && onAction && (
+          <button onClick={onAction} className="inline-flex items-center gap-2 rounded-xl bg-[hsl(222,47%,11%)] px-5 py-2.5 text-[13px] font-semibold text-white transition-all hover:opacity-90">
+            {actionLabel} <ArrowRight size={14} />
+          </button>
+        )}
       </div>
     </div>
   )

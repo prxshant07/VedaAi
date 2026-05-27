@@ -3,266 +3,164 @@
 @tailwind utilities;
 
 /* =========================================
-   ROOT THEME TOKENS
+   ROOT THEME TOKENS — VedaAI
 ========================================= */
 
 @layer base {
   :root {
-    /* Existing shadcn tokens */
-    --background: 0 0% 95%;
-    --foreground: 240 10% 10%;
+    --background: 48 20% 97%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 10%;
+    --card-foreground: 222 47% 11%;
 
-    --primary: 240 6% 10%;
+    --primary: 222 47% 11%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 5% 96%;
-    --secondary-foreground: 240 5% 20%;
+    --secondary: 48 30% 95%;
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 45%;
+    --muted: 48 20% 95%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 240 5% 96%;
-    --accent-foreground: 240 5% 20%;
+    --accent: 45 100% 54%;
+    --accent-foreground: 222 47% 11%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 14 100% 50%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 240 6% 88%;
-    --input: 240 6% 88%;
+    --border: 220 13% 90%;
+    --input: 220 13% 90%;
+    --ring: 222 47% 11%;
 
-    --ring: 240 5% 20%;
-
-    /* NEW */
     --radius: 1.25rem;
 
-    /* VedaAI extra tokens */
+    /* VedaAI tokens */
     --surface: 0 0% 100%;
-
     --text-primary: 222 47% 11%;
-
     --text-secondary: 215 16% 47%;
-
+    --brand: 45 100% 54%;
+    --brand-dark: 40 96% 44%;
     --success: 160 84% 39%;
-
     --warning: 38 92% 50%;
-
-    --danger: 0 84% 60%;
+    --danger: 14 100% 50%;
   }
 
   .dark {
-    --background: 240 10% 4%;
+    --background: 222 47% 6%;
     --foreground: 0 0% 98%;
-
-    --card: 240 10% 7%;
+    --card: 222 47% 9%;
     --card-foreground: 0 0% 98%;
-
-    --primary: 263 85% 65%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 240 4% 16%;
+    --primary: 45 100% 54%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 222 47% 14%;
     --secondary-foreground: 0 0% 98%;
-
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 5% 65%;
-
-    --accent: 240 4% 16%;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62% 31%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 240 4% 18%;
-    --input: 240 4% 18%;
-
-    --ring: 262 83% 58%;
-
-    --surface: 240 10% 7%;
-
+    --muted: 222 47% 14%;
+    --muted-foreground: 215 16% 60%;
+    --accent: 45 100% 54%;
+    --accent-foreground: 222 47% 11%;
+    --border: 222 47% 18%;
+    --input: 222 47% 18%;
+    --surface: 222 47% 9%;
     --text-primary: 0 0% 98%;
-
-    --text-secondary: 240 5% 65%;
+    --text-secondary: 215 16% 60%;
   }
 }
 
 /* =========================================
-   GLOBAL BASE STYLES
+   GLOBAL BASE
 ========================================= */
 
 @layer base {
-  * {
-    @apply border-border;
-  }
+  * { @apply border-border; }
 
-  html {
-    scroll-behavior: smooth;
-  }
+  html { scroll-behavior: smooth; }
 
   body {
     @apply bg-background text-foreground antialiased;
-
-    font-family:
-      var(--font-geist-sans),
-      system-ui,
-      sans-serif;
-
+    font-family: 'DM Sans', var(--font-geist-sans), system-ui, sans-serif;
     min-height: 100vh;
-
     overflow-x: hidden;
   }
 
-  button {
-    @apply transition-all duration-200;
-  }
-
-  input,
-  textarea,
-  select {
-    @apply outline-none;
-  }
+  button { @apply transition-all duration-200; }
+  input, textarea, select { @apply outline-none; }
 }
 
 /* =========================================
-   REUSABLE COMPONENT UTILITIES
+   COMPONENT UTILITIES
 ========================================= */
 
 @layer components {
+  /* Card */
   .veda-card {
-    @apply bg-white
-      border
-      border-border
-      rounded-[28px]
-      shadow-card;
+    @apply bg-white border border-border rounded-[20px] shadow-[0_1px_3px_rgba(0,0,0,0.06),0_1px_2px_rgba(0,0,0,0.04)];
   }
 
-  .veda-glass {
-    @apply bg-white/80
-      backdrop-blur-xl
-      border
-      border-white/20;
+  /* Primary button — black */
+  .veda-btn-primary {
+    @apply h-10 px-5 rounded-xl bg-[hsl(222,47%,11%)] hover:opacity-90 text-white font-medium text-sm transition-all flex items-center gap-2;
   }
 
-  .veda-button-primary {
-    @apply h-12
-      px-6
-      rounded-2xl
-      bg-violet-600
-      hover:bg-violet-700
-      text-white
-      font-medium
-      transition-all;
+  /* Secondary button */
+  .veda-btn-secondary {
+    @apply h-10 px-5 rounded-xl border border-border bg-white hover:bg-muted text-[hsl(222,47%,11%)] font-medium text-sm transition-all flex items-center gap-2;
   }
 
-  .veda-button-secondary {
-    @apply h-12
-      px-6
-      rounded-2xl
-      bg-violet-50
-      hover:bg-violet-100
-      text-violet-700
-      font-medium
-      transition-all;
+  /* Brand accent button — yellow */
+  .veda-btn-accent {
+    @apply h-10 px-5 rounded-xl bg-[hsl(45,100%,54%)] hover:bg-[hsl(40,96%,44%)] text-[hsl(222,47%,11%)] font-semibold text-sm transition-all flex items-center gap-2;
   }
 
+  /* Input */
   .veda-input {
-    @apply h-12
-      w-full
-      rounded-2xl
-      border
-      border-border
-      bg-white
-      px-4
-      text-sm
-      focus:ring-4
-      focus:ring-violet-100
-      focus:border-violet-500
-      transition-all;
+    @apply h-10 w-full rounded-xl border border-border bg-white px-3.5 text-sm focus:ring-2 focus:ring-[hsl(222,47%,11%)]/10 focus:border-[hsl(222,47%,11%)] transition-all;
   }
 
+  /* Dashboard layout */
   .dashboard-container {
-    @apply max-w-[1600px]
-      mx-auto
-      w-full;
+    @apply max-w-[1600px] mx-auto w-full;
   }
 
   .dashboard-grid {
-    @apply grid
-      grid-cols-1
-      md:grid-cols-2
-      xl:grid-cols-3
-      gap-5;
+    @apply grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4;
+  }
+
+  /* Nav item */
+  .nav-item {
+    @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13.5px] font-medium transition-all duration-150 cursor-pointer;
+  }
+
+  .nav-item-default {
+    @apply text-[hsl(215,16%,47%)] hover:bg-[hsl(48,20%,95%)] hover:text-[hsl(222,47%,11%)];
+  }
+
+  .nav-item-active {
+    @apply bg-[hsl(45,100%,54%)]/15 text-[hsl(222,47%,11%)] border-l-[3px] border-[hsl(45,100%,54%)];
   }
 }
 
 /* =========================================
-   CUSTOM SCROLLBAR
+   SCROLLBAR
 ========================================= */
 
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #d4d4d8;
-  border-radius: 999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #a1a1aa;
-}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #a1a1aa; }
 
 /* =========================================
-   PRINT STYLES
-========================================= */
-
-@media print {
-  .no-print {
-    display: none !important;
-  }
-
-  .print-paper {
-    font-family: 'Times New Roman', serif;
-    color: black;
-    background: white;
-  }
-
-  body {
-    background: white !important;
-  }
-}
-
-/* =========================================
-   SKELETON LOADER
+   SKELETON
 ========================================= */
 
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .skeleton-shimmer {
-  background:
-    linear-gradient(
-      90deg,
-      #f4f4f5 25%,
-      #e4e4e7 50%,
-      #f4f4f5 75%
-    );
-
+  background: linear-gradient(90deg, #f4f4f5 25%, #e4e4e7 50%, #f4f4f5 75%);
   background-size: 200% 100%;
-
   animation: shimmer 1.5s infinite linear;
 }
 
@@ -271,17 +169,20 @@
 ========================================= */
 
 .fade-page {
-  animation: fadePage 0.35s ease-out;
+  animation: fadePage 0.3s ease-out;
 }
 
 @keyframes fadePage {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* =========================================
+   PRINT
+========================================= */
+
+@media print {
+  .no-print { display: none !important; }
+  .print-paper { font-family: 'Times New Roman', serif; color: black; background: white; }
+  body { background: white !important; }
 }

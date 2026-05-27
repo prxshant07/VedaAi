@@ -10,84 +10,29 @@ interface StatCardProps {
   positive?: boolean
 }
 
-export function StatCard({
-  title,
-  value,
-  change,
-  icon,
-  positive = true,
-}: StatCardProps) {
+export function StatCard({ title, value, change, icon, positive = true }: StatCardProps) {
   return (
-    <div
-      className="
-        group
-        relative
-        overflow-hidden
-        rounded-[28px]
-        border
-        border-border
-        bg-white
-        p-6
-        shadow-card
-        transition-all
-        duration-300
-        hover:-translate-y-1
-      "
-    >
-      {/* Glow Background */}
-      <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-violet-100/50 blur-3xl transition-all duration-500 group-hover:scale-125" />
-
-      {/* Content */}
-      <div className="relative z-10">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="text-sm font-medium text-textSecondary">
-              {title}
-            </p>
-
-            <h3 className="mt-4 text-3xl font-bold tracking-tight text-textPrimary">
-              {value}
-            </h3>
-          </div>
-
-          {icon && (
-            <div
-              className="
-                flex
-                h-14
-                w-14
-                items-center
-                justify-center
-                rounded-2xl
-                bg-violet-50
-                text-violet-700
-              "
-            >
-              {icon}
-            </div>
-          )}
+    <div className="relative overflow-hidden rounded-[14px] border border-[#E5E5E2] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-200 hover:-translate-y-[1px] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+      <div className="absolute top-0 left-0 right-0 h-[3px] bg-[hsl(45,100%,54%)] rounded-t-[14px]" />
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-[12.5px] font-medium text-[hsl(215,16%,47%)]">{title}</p>
+          <h3 className="mt-3 text-3xl font-bold tracking-tight text-[hsl(222,47%,11%)]">{value}</h3>
         </div>
-
-        {/* Footer */}
-        {change && (
-          <div className="mt-6 flex items-center gap-2">
-            <div
-              className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                positive
-                  ? 'bg-emerald-50 text-emerald-600'
-                  : 'bg-red-50 text-red-600'
-              }`}
-            >
-              {change}
-            </div>
-
-            <span className="text-xs text-textSecondary">
-              vs last month
-            </span>
+        {icon && (
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(222,47%,11%)] text-[hsl(45,100%,54%)]">
+            {icon}
           </div>
         )}
       </div>
+      {change && (
+        <div className="mt-4 flex items-center gap-2">
+          <span className={`rounded-full px-2.5 py-0.5 text-[11.5px] font-semibold ${positive ? 'bg-[#EBF7F0] text-[#1A7A47]' : 'bg-[#FEF0ED] text-[#B83F20]'}`}>
+            {change}
+          </span>
+          <span className="text-[11.5px] text-[hsl(215,16%,55%)]">vs last month</span>
+        </div>
+      )}
     </div>
   )
 }

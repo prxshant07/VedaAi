@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Assignment, AssignmentFormData, GeneratedPaper, JobStatus } from '@/types';
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
+  baseURL: process.env.NEXT_PUBLIC_API_URL!,
   timeout: 30000,
   headers: { 'Content-Type': 'application/json' },
 });

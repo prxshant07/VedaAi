@@ -1,9 +1,7 @@
 import { Queue, QueueEvents } from 'bullmq';
 
 const connection = {
-  host: process.env.REDIS_HOST || 'localhost',
-  port: parseInt(process.env.REDIS_PORT || '6379'),
-  password: process.env.REDIS_PASSWORD,
+  url: process.env.REDIS_URL!,
 };
 
 export const assessmentQueue = new Queue('assessment-generation', {

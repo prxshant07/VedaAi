@@ -1,95 +1,209 @@
 'use client';
-import axios from 'axios';
-import { Assignment, AssignmentFormData, GeneratedPaper, JobStatus } from '@/types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import axios, { AxiosInstance } from 'axios';
+import {
+  Assignment,
+  AssignmentFormData,
+  GeneratedPaper,
+  JobStatus,
+} from '@/types';
 
-console.log('NEXT_PUBLIC_API_URL:', API_URL);
+function createApiClient(): AxiosInstance {
+  const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
-const api = axios.create({
-  baseURL: API_URL,
-  timeout: 30000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+  console.log('NEXT_PUBLIC_API_URL:', baseURL);
 
-api.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    const message = err.response?.data?.error || err.message || 'Something went wrong';
-    return Promise.reject(new Error(message));
-  }
-);
+  const api = axios.create({
+    baseURL,
+    timeout: 30000,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  api.interceptors.response.use(
+    (res) => res,
+    (err) => {
+      const message =
+        err.response?.data?.error ||
+        err.message ||
+        'Something went wrong';
+
+      return Promise.reject(new Error(message));
+    }
+  );
+
+  return api;
+}
 
 // Assignments
 export async function createAssignment(
   data: AssignmentFormData,
-  fileInfo?: { filename: string; originalName: string; mimeType: string; extractedText?: string }
-): Promise<{ assignment: { id: string; title: string; status: string; jobId: string } }> {
-  const payload = { ...data, uploadedFile: fileInfo };
-  const res = await api.post('/api/assignments', payload);
+  fileInfo?: {
+    filename: string;
+    originalName: string;
+    mimeType: string;
+    extractedText?: string;
+  }
+): Promise<{
+  assignment: {
+    id: string;
+    title: string;
+    status: string;
+    jobId: string;
+  };
+}> {
+  const payload = {
+    ...data,
+    uploadedFile: fileInfo,
+  };
+
+  const res = await createApiClient().post(
+    '/api/assignments',
+    payload
+  );
+
   return res.data;
 }
 
-export async function fetchAssignments(): Promise<{ assignments: Assignment[]; pagination: { total: number } }> {
-  const res = await api.get('/api/assignments');
+export async function fetchAssignments(): Promise<{
+  assignments: Assignment[];
+  pagination: {
+    total: number;
+  };
+}> {
+  const res = await createApiClient().get(
+    '/api/assignments'
+  );
+
   return res.data;
 }
 
-export async function fetchAssignment(id: string): Promise<{ assignment: Assignment }> {
-  const res = await api.get(`/api/assignments/${id}`);
+export async function fetchAssignment(
+  id: string
+): Promise<{
+  assignment: Assignment;
+}> {
+  const res = await createApiClient().get(
+    `/api/assignments/${id}`
+  );
+
   return res.data;
 }
 
-export async function deleteAssignment(id: string): Promise<void> {
-  await api.delete(`/api/assignments/${id}`);
+export async function deleteAssignment(
+  id: string
+): Promise<void> {
+  await createApiClient().delete(
+    `/api/assignments/${id}`
+  );
 }
 
 // Assessments
-export async function fetchAssessmentByAssignment(assignmentId: string): Promise<{ paper: GeneratedPaper }> {
-  const res = await api.get(`/api/assessments/by-assignment/${assignmentId}`);
+export async function fetchAssessmentByAssignment(
+  assignmentId: string
+): Promise<{
+  paper: GeneratedPaper;
+}> {
+  const res = await createApiClient().get(
+    `/api/assessments/by-assignment/${assignmentId}`
+  );
+
   return res.data;
 }
 
-export async function fetchAssessment(id: string): Promise<{ paper: GeneratedPaper }> {
-  const res = await api.get(`/api/assessments/${id}`);
+export async function fetchAssessment(
+  id: string
+): Promise<{
+  paper: GeneratedPaper;
+}> {
+  const res = await createApiClient().get(
+    `/api/assessments/${id}`
+  );
+
   return res.data;
 }
 
-export async function regenerateAssessment(assignmentId: string): Promise<{ jobId: string }> {
-  const res = await api.post(`/api/assessments/regenerate/${assignmentId}`);
+export async function regenerateAssessment(
+  assignmentId: string
+): Promise<{
+  jobId: string;
+}> {
+  const res = await createApiClient().post(
+    `/api/assessments/regenerate/${assignmentId}`
+  );
+
   return res.data;
 }
 
-export async function fetchJobStatus(jobId: string): Promise<{ status: JobStatus }> {
-  const res = await api.get(`/api/assessments/job/${jobId}/status`);
+export async function fetchJobStatus(
+  jobId: string
+): Promise<{
+  status: JobStatus;
+}> {
+  const res = await createApiClient().get(
+    `/api/assessments/job/${jobId}/status`
+  );
+
   return res.data;
 }
 
 // File upload
-export async function uploadFile(file: File): Promise<{
-  file: { filename: string; originalName: string; mimeType: string; extractedText?: string; preview?: string };
+export async function uploadFile(
+  file: File
+): Promise<{
+  file: {
+    filename: string;
+    originalName: string;
+    mimeType: string;
+    extractedText?: string;
+    preview?: string;
+  };
 }> {
   const formData = new FormData();
+
   formData.append('file', file);
-  const res = await api.post('/api/upload', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
+
+  const res = await createApiClient().post(
+    '/api/upload',
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
+
   return res.data;
 }
 
 // PDF download
-export async function downloadPDF(assignmentId: string): Promise<void> {
-  const res = await api.get(`/api/pdf/assignment/${assignmentId}`, {
-    responseType: 'blob',
-  });
-  const url = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
+export async function downloadPDF(
+  assignmentId: string
+): Promise<void> {
+  const res = await createApiClient().get(
+    `/api/pdf/assignment/${assignmentId}`,
+    {
+      responseType: 'blob',
+    }
+  );
+
+  const url = URL.createObjectURL(
+    new Blob([res.data], {
+      type: 'application/pdf',
+    })
+  );
+
   const link = document.createElement('a');
+
   link.href = url;
   link.download = `assessment-${assignmentId}.pdf`;
+
   document.body.appendChild(link);
+
   link.click();
+
   document.body.removeChild(link);
+
   URL.revokeObjectURL(url);
 }

@@ -1,3 +1,4 @@
+'use client';
 import axios from 'axios';
 import { Assignment, AssignmentFormData, GeneratedPaper, JobStatus } from '@/types';
 

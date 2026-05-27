@@ -41,18 +41,16 @@ export function Sidebar() {
         <div className="flex items-center gap-2 px-5 py-4 border-b border-border w-[251px] h-[72px]">
 
           {/* Logo Icon */}
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 via-amber-600 to-stone-800 shadow-sm flex-none">
+          <div className="flex items-center gap-2">
 
-            {/* White V */}
-            <span className="text-white text-[18px] font-extrabold leading-none">
-            V
-            </span>
-          </div>
+            <img
+            src="\illustrations\logo2.png"
+            alt="VedaAI Logo"
+            className="[w-40] [h-40] [rounded-15px] object-contain"
+            />
 
-            {/* Brand Text */}
-            <div className="flex items-center h-10">
-              <span className="font-['Bricolage_Grotesque'] text-[28px] font-bold leading-[20px] tracking-[-0.06em] text-[#1B1D21]">
-              VedaAI
+            <span className="font-['Bricolage_Grotesque'] text-[28px] font-bold leading-[20px] tracking-[-0.06em] text-[#1B1D21]">
+            VedaAI
             </span>
           </div>
         </div>

@@ -56,6 +56,12 @@ app.use('/api/pdf', pdfRoutes);
 app.get('/health', (_, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
 // Error handling
+app.get('/', (_, res) => {
+  res.json({
+    message: 'VedaAI Backend Running',
+    status: 'ok',
+  });
+});
 app.use(errorHandler);
 
 // Initialize Socket.IO

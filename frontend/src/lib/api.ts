@@ -1,10 +1,16 @@
 import axios from 'axios';
 import { Assignment, AssignmentFormData, GeneratedPaper, JobStatus } from '@/types';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+console.log('NEXT_PUBLIC_API_URL:', API_URL);
+
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL!,
+  baseURL: API_URL,
   timeout: 30000,
-  headers: { 'Content-Type': 'application/json' },
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
 api.interceptors.response.use(

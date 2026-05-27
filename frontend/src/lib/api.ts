@@ -9,7 +9,10 @@ import {
 } from '@/types';
 
 function createApiClient(): AxiosInstance {
-  const baseURL = process.env.NEXT_PUBLIC_API_URL;
+  const baseURL =
+    typeof window !== 'undefined'
+      ? process.env.NEXT_PUBLIC_API_URL
+      : '';
 
   console.log('NEXT_PUBLIC_API_URL:', baseURL);
 

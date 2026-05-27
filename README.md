@@ -210,8 +210,6 @@ MONGODB_URI=mongodb://localhost:27017/ai-assessment
 
 # Redis
 REDIS_URL=redis://localhost:6379
-REDIS_HOST=localhost
-REDIS_PORT=6379
 
 # OpenAI
 OPENAI_API_KEY=sk-your-key-here

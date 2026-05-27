@@ -66,7 +66,7 @@ const PORT = process.env.PORT || 5000;
 async function bootstrap() {
   try {
     await connectMongoDB();
-    await connectRedis();
+    // await connectRedis();
 
     httpServer.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);

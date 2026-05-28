@@ -15,7 +15,7 @@ import { useAssessmentStore } from '@/store/assessmentStore'
 
 import { fetchAssignments } from '@/lib/api'
 
-import { AssignmentCard } from '@/components/assessment/AssignmentCard'
+import { AssignmentCardV2 } from '@/components/dashboard/assignment-card-v2'
 
 import { StatCard } from '@/components/dashboard/stat-card'
 
@@ -254,7 +254,6 @@ export default function DashboardPage() {
 
         ) : assignments.length === 0 ? (
 
-          /* Empty */
           <EmptyState
             illustration="/illustrations/Illustrations.png"
             title="No assignments yet"
@@ -277,9 +276,21 @@ export default function DashboardPage() {
               {assignments
                 .slice(0, 6)
                 .map((a) => (
-                  <AssignmentCard
+                  <AssignmentCardV2
                     key={a._id}
-                    assignment={a}
+                    id={a._id}
+                    title={a.title}
+                    subject={a.subject || 'General'}
+                    questions={a.totalQuestions || 0}
+                    createdAt={a.createdAt}
+                    dueDate={a.dueDate}
+                    status={
+                      a.status === 'completed'
+                        ? 'completed'
+                        : a.status === 'processing'
+                        ? 'draft'
+                        : 'active'
+                    }
                   />
                 ))}
             </section>

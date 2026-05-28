@@ -11,6 +11,7 @@ import {
   Settings,
   Plus,
 } from 'lucide-react'
+
 import { cn } from '@/lib/utils'
 
 const navItems = [
@@ -34,108 +35,150 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="h-full">
-      <div className="flex h-full flex-col bg-white border-r border-border">
+    <aside className="h-full p-3">
+      <div className="flex h-full w-[304px] flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
 
-        {/* Logo Section */}
-        <div className="flex items-center gap-2 px-5 py-4 border-b border-border w-[251px] h-[72px]">
+        {/* Top Section */}
+        <div>
 
-          {/* Logo Icon */}
-          <div className="flex items-center gap-2">
-
+          {/* Logo */}
+          <div className="flex items-center gap-3">
             <img
-            src="\illustrations\logo2.png"
-            alt="VedaAI Logo"
-            className="[w-40] [h-40] [rounded-15px] object-contain"
+              src="/illustrations/logo2.png"
+              alt="VedaAI Logo"
+              className="h-11 w-11 rounded-[15px] object-cover"
             />
 
             <span className="text-[28px] font-bold tracking-[-0.06em] text-zinc-900">
-            VedaAI
+              VedaAI
             </span>
           </div>
-        </div>
 
-        {/* Create Assignment CTA */}
-        <div className="px-4 py-3">
-          <Link
-            href="/assignments/create"
-            className="flex items-center gap-2 w-full rounded-xl bg-[hsl(222,47%,11%)] text-white px-4 py-2.5 text-[13px] font-semibold hover:opacity-90 transition-opacity"
-          >
-            <Plus size={15} strokeWidth={2.5} />
-            Create Assignment
-          </Link>
-        </div>
+          {/* CTA */}
+          <div className="mt-8">
+            <Link
+              href="/assignments/create"
+              className="
+                flex
+                h-12
+                w-full
+                items-center
+                justify-center
+                gap-2
+                rounded-2xl
+                bg-[#0B1736]
+                px-5
+                text-[14px]
+                font-semibold
+                text-white
+                transition-opacity
+                hover:opacity-90
+              "
+            >
+              <Plus size={16} strokeWidth={2.5} />
+              Create Assignment
+            </Link>
+          </div>
 
-        {/* Nav */}
-        <nav className="flex-1 px-3 py-2 space-y-0.5">
-          {navItems.map((item) => {
-            const Icon = item.icon
-            const active = isActive(item.href)
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  'group flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13.5px] font-medium transition-all duration-150 border-l-[2.5px]',
-                  active
-                    ? 'bg-[hsl(45,100%,54%)]/12 text-[hsl(222,47%,11%)] border-[hsl(45,100%,54%)]'
-                    : 'text-[hsl(215,16%,47%)] hover:bg-[hsl(48,20%,96%)] hover:text-[hsl(222,47%,11%)] border-transparent'
-                )}
-              >
-                <Icon
-                  size={16}
+          {/* Navigation */}
+          <nav className="mt-8 space-y-1">
+            {navItems.map((item) => {
+              const Icon = item.icon
+              const active = isActive(item.href)
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
                   className={cn(
-                    'flex-shrink-0 transition-colors',
-                    active ? 'text-[hsl(222,47%,11%)]' : 'text-[hsl(215,16%,55%)] group-hover:text-[hsl(222,47%,11%)]'
+                    'group flex h-11 items-center gap-3 rounded-xl px-4 text-[14px] font-medium transition-all duration-150',
+                    active
+                      ? 'bg-[#F5F5F5] text-zinc-900'
+                      : 'text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900'
                   )}
-                />
-                <span className="flex-1">{item.label}</span>
-                {item.badge && (
-                  <span className="ml-auto text-[10px] font-semibold bg-[hsl(14,100%,50%)] text-white px-1.5 py-0.5 rounded-full leading-tight">
-                    6
-                  </span>
-                )}
-              </Link>
-            )
-          })}
-        </nav>
+                >
+                  <Icon
+                    size={18}
+                    className={cn(
+                      active
+                        ? 'text-zinc-900'
+                        : 'text-zinc-400 group-hover:text-zinc-900'
+                    )}
+                  />
 
-        {/* Bottom nav */}
-        <div className="px-3 py-2 space-y-0.5">
-          {bottomItems.map((item) => {
-            const Icon = item.icon
-            const active = isActive(item.href)
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  'flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13.5px] font-medium transition-all duration-150 border-l-[2.5px]',
-                  active
-                    ? 'bg-[hsl(45,100%,54%)]/12 text-[hsl(222,47%,11%)] border-[hsl(45,100%,54%)]'
-                    : 'text-[hsl(215,16%,47%)] hover:bg-[hsl(48,20%,96%)] hover:text-[hsl(222,47%,11%)] border-transparent'
-                )}
-              >
-                <Icon size={16} className="flex-shrink-0" />
-                {item.label}
-              </Link>
-            )
-          })}
+                  <span className="flex-1">
+                    {item.label}
+                  </span>
+
+                  {item.badge && (
+                    <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#FF5A36] px-1.5 text-[10px] font-semibold text-white">
+                      6
+                    </span>
+                  )}
+                </Link>
+              )
+            })}
+          </nav>
         </div>
 
-        {/* School card */}
-        <div className="p-3 border-t border-border">
-          <div className="flex items-center gap-2.5 rounded-xl bg-[hsl(48,20%,96%)] border border-border px-3 py-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[hsl(222,47%,11%)] text-[hsl(45,100%,54%)] text-[11px] font-bold flex-shrink-0">
-              DP
-            </div>
-            <div className="min-w-0">
-              <p className="text-[12.5px] font-semibold text-[hsl(222,47%,11%)] truncate">Delhi Public School</p>
-              <p className="text-[11px] text-[hsl(215,16%,55%)] truncate">Bokaro, Bihar City</p>
+        {/* Bottom Section */}
+        <div className="space-y-4">
+
+          {/* Settings */}
+          <div>
+            {bottomItems.map((item) => {
+              const Icon = item.icon
+              const active = isActive(item.href)
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    'flex h-11 items-center gap-3 rounded-xl px-4 text-[14px] font-medium transition-all duration-150',
+                    active
+                      ? 'bg-[#F5F5F5] text-zinc-900'
+                      : 'text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900'
+                  )}
+                >
+                  <Icon
+                    size={18}
+                    className={cn(
+                      active
+                        ? 'text-zinc-900'
+                        : 'text-zinc-400'
+                    )}
+                  />
+
+                  {item.label}
+                </Link>
+              )
+            })}
+          </div>
+
+          {/* School Card */}
+          <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3">
+            <div className="flex items-center gap-3">
+
+              {/* Avatar */}
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0B1736] text-[13px] font-bold text-[#FFD84D]">
+                DP
+              </div>
+
+              {/* Info */}
+              <div className="min-w-0">
+                <p className="truncate text-[13px] font-semibold text-zinc-900">
+                  Delhi Public School
+                </p>
+
+                <p className="truncate text-[12px] text-zinc-500">
+                  Bokaro, Bihar City
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
+        </div>
       </div>
     </aside>
   )

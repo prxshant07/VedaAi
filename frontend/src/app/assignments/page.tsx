@@ -6,7 +6,6 @@ import Image from 'next/image'
 
 import {
   Search,
-  ArrowUpDown,
   Trash2,
   ArrowRight,
   Plus,
@@ -104,6 +103,7 @@ function AssignmentCard({
       "
     >
 
+      {/* Header */}
       <div className="mb-4 flex items-start justify-between gap-3">
 
         <Link
@@ -141,12 +141,14 @@ function AssignmentCard({
         </span>
       </div>
 
+      {/* Subject */}
       {assignment.subject && (
         <p className="mb-4 text-[13px] text-zinc-500">
           {assignment.subject}
         </p>
       )}
 
+      {/* Stats */}
       <div className="mb-4 grid grid-cols-2 gap-3">
 
         <div
@@ -190,6 +192,7 @@ function AssignmentCard({
         </div>
       </div>
 
+      {/* Question Types */}
       <div className="mb-4 flex flex-wrap gap-2">
         {assignment.questionTypes.map((type) => (
           <span
@@ -211,6 +214,7 @@ function AssignmentCard({
         ))}
       </div>
 
+      {/* Difficulty */}
       <div className="mb-5 flex h-1.5 gap-1 overflow-hidden rounded-full">
         {(
           ['easy', 'medium', 'hard'] as const
@@ -239,6 +243,7 @@ function AssignmentCard({
         })}
       </div>
 
+      {/* Footer */}
       <div className="flex items-center justify-between border-t border-zinc-100 pt-4">
 
         <p className="text-[12px] text-zinc-400">
@@ -340,18 +345,6 @@ function AssignmentCard({
   )
 }
 
-type SortKey =
-  | 'createdAt'
-  | 'title'
-  | 'totalQuestions'
-
-type FilterStatus =
-  | 'all'
-  | 'completed'
-  | 'processing'
-  | 'queued'
-  | 'failed'
-
 export default function AssignmentsPage() {
   const {
     assignments,
@@ -361,12 +354,6 @@ export default function AssignmentsPage() {
   } = useAssessmentStore()
 
   const [search, setSearch] = useState('')
-
-  const [sortBy, setSortBy] =
-    useState<SortKey>('createdAt')
-
-  const [filterStatus, setFilterStatus] =
-    useState<FilterStatus>('all')
 
   useEffect(() => {
     setAssignmentsLoading(true)
@@ -397,32 +384,52 @@ export default function AssignmentsPage() {
     }
   }
 
-  const filtered = assignments
-    .filter((a) => {
-      const matchesSearch =
-        a.title
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
-        (a.subject || '')
-          .toLowerCase()
-          .includes(search.toLowerCase())
-
-      const matchesStatus =
-        filterStatus === 'all' ||
-        a.status === filterStatus
-
-      return (
-        matchesSearch && matchesStatus
-      )
-    })
+  const filtered = assignments.filter((a) => {
+    return (
+      a.title
+        .toLowerCase()
+        .includes(search.toLowerCase()) ||
+      (a.subject || '')
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    )
+  })
 
   return (
     <div className="flex h-full flex-col">
 
+      {/* EMPTY STATE */}
       {filtered.length === 0 ? (
-        <div className="flex flex-1 items-center justify-center pb-24">
+        <div
+          className="
+            flex
+            flex-1
+            items-center
+            justify-center
+            rounded-[32px]
+            pb-24
+          "
+          style={{
+            background:
+              'linear-gradient(180deg, #EEEEEE 0%, #DADADA 100%)',
+          }}
+        >
 
-          <div className="mx-auto flex max-w-[520px] flex-col items-center text-center">
+          <div
+            className="
+              mx-auto
+              flex
+              max-w-[560px]
+              flex-col
+              items-center
+              rounded-[32px]
+              bg-white/55
+              px-12
+              py-14
+              text-center
+              backdrop-blur-xl
+            "
+          >
 
             {/* Illustration */}
             <div
@@ -443,6 +450,7 @@ export default function AssignmentsPage() {
               />
             </div>
 
+            {/* Heading */}
             <h3
               className="
                 mb-4
@@ -452,13 +460,14 @@ export default function AssignmentsPage() {
                 text-[20px]
                 leading-[140%]
                 tracking-[-0.04em]
-              text-[#303030]
+                text-[#303030]
                 font-[family-name:var(--font-bricolage)]
               "
             >
               No assignments yet
             </h3>
 
+            {/* Description */}
             <p
               className="
                 mb-10
@@ -468,15 +477,14 @@ export default function AssignmentsPage() {
                 text-[16px]
                 leading-[140%]
                 tracking-[-0.04em]
-              text-[#5E5E5ECC]
+                text-[#5E5E5ECC]
                 font-[family-name:var(--font-bricolage)]
               "
             >
-              Create your first assignment to start collecting and grading student 
-              submissions. You can set up rubrics, define marking criteria, and let AI 
-              assist with grading.
+              Create your first assignment to start collecting and grading student submissions. You can set up rubrics, define marking criteria, and let AI assist with grading.
             </p>
 
+            {/* CTA */}
             <Link
               href="/assignments/create"
               className="
@@ -507,50 +515,48 @@ export default function AssignmentsPage() {
           {/* Toolbar */}
           <div className="mb-5 flex items-center justify-between gap-3">
 
-            <div className="flex items-center gap-3">
+            {/* Search */}
+            <div className="relative w-[320px]">
 
-              {/* Search */}
-              <div className="relative w-[320px]">
+              <Search
+                size={14}
+                className="
+                  absolute
+                  left-3
+                  top-1/2
+                  -translate-y-1/2
+                  text-zinc-400
+                "
+              />
 
-                <Search
-                  size={14}
-                  className="
-                    absolute
-                    left-3
-                    top-1/2
-                    -translate-y-1/2
-                    text-zinc-400
-                  "
-                />
-
-                <input
-                  type="text"
-                  placeholder="Search assignments..."
-                  value={search}
-                  onChange={(e) =>
-                    setSearch(e.target.value)
-                  }
-                  className="
-                    h-10
-                    w-full
-                    rounded-xl
-                    border
-                    border-zinc-200
-                    bg-white
-                    pl-9
-                    pr-4
-                    text-[13px]
-                    outline-none
-                    transition-all
-                    placeholder:text-zinc-400
-                    focus:border-zinc-300
-                    focus:ring-4
-                    focus:ring-zinc-100
-                  "
-                />
-              </div>
+              <input
+                type="text"
+                placeholder="Search assignments..."
+                value={search}
+                onChange={(e) =>
+                  setSearch(e.target.value)
+                }
+                className="
+                  h-10
+                  w-full
+                  rounded-xl
+                  border
+                  border-zinc-200
+                  bg-white
+                  pl-9
+                  pr-4
+                  text-[13px]
+                  outline-none
+                  transition-all
+                  placeholder:text-zinc-400
+                  focus:border-zinc-300
+                  focus:ring-4
+                  focus:ring-zinc-100
+                "
+              />
             </div>
 
+            {/* CTA */}
             <Link
               href="/assignments/create"
               className="

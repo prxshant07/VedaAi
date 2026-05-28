@@ -49,7 +49,7 @@ export function Sidebar() {
             className="[w-40] [h-40] [rounded-15px] object-contain"
             />
 
-            <span className="font-['Bricolage_Grotesque'] text-[28px] font-bold leading-[20px] tracking-[-0.06em] text-[#1B1D21]">
+            <span className="text-[28px] font-bold tracking-[-0.06em] text-zinc-900">
             VedaAI
             </span>
           </div>

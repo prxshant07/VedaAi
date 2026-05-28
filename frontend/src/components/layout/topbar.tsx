@@ -58,68 +58,10 @@ export function Topbar({
               {pageTitle}
             </h1>
           )}
-
-          {pageSubtitle && (
-            <p
-              className="
-                mt-1
-                truncate
-                text-[11px]
-                font-[400]
-                leading-none
-                text-[#7A7A7A]
-                font-[family-name:var(--font-bricolage)]
-              "
-            >
-              {pageSubtitle}
-            </p>
-          )}
         </div>
 
         {/* Right */}
         <div className="flex items-center gap-[10px]">
-
-          {/* Search */}
-          <div
-            className="
-              relative
-              hidden
-              md:flex
-              h-[40px]
-              w-[801px]
-              items-center
-              gap-[8px]
-              rounded-[16px]
-              border
-              border-[#E7E7E7]
-              bg-white
-              px-[14px]
-            "
-          >
-
-            <Search
-              size={15}
-              className="text-[#9A9A9A]"
-            />
-
-            <input
-              type="text"
-              value={search}
-              onChange={(e) =>
-                setSearch(e.target.value)
-              }
-              placeholder="Search assignments..."
-              className="
-                w-full
-                bg-transparent
-                text-[13px]
-                text-[#2A2A2A]
-                outline-none
-                placeholder:text-[#9A9A9A]
-              "
-            />
-          </div>
-
           {/* Notifications */}
           <button
             className="

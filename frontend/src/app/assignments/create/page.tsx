@@ -2,17 +2,16 @@
 
 import { useState, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
-
 import { zodResolver } from '@hookform/resolvers/zod'
-
 import { z } from 'zod'
-
 import { useRouter } from 'next/navigation'
 
 import {
-  Upload,
-  Check,
-  ChevronRight,
+  UploadCloud,
+  Plus,
+  ArrowLeft,
+  ArrowRight,
+  X,
 } from 'lucide-react'
 
 import {
@@ -24,22 +23,8 @@ import { useAssessmentStore } from '@/store/assessmentStore'
 
 import { QuestionType } from '@/types'
 
-import {
-  cn,
-  QUESTION_TYPE_LABELS,
-} from '@/lib/utils'
-
 const schema = z.object({
-  title: z
-    .string()
-    .min(
-      3,
-      'Title must be at least 3 characters'
-    ),
-
-  dueDate: z
-    .string()
-    .min(1, 'Due date is required'),
+  dueDate: z.string().min(1),
 
   subject: z.string().optional(),
 
@@ -47,30 +32,15 @@ const schema = z.object({
     .string()
     .max(2000)
     .optional(),
-
-  totalQuestions: z.coerce.number()
-    .int()
-    .min(1)
-    .max(100),
-
-  totalMarks: z.coerce.number()
-    .int()
-    .min(1),
 })
 
 type FormValues = z.infer<typeof schema>
 
-const QUESTION_TYPES: QuestionType[] = [
-  'mcq',
-  'short',
-  'long',
-  'true_false',
-]
-
-type DifficultyState = {
-  easy: number
-  medium: number
-  hard: number
+type QuestionRow = {
+  id: number
+  label: string
+  questions: number
+  marks: number
 }
 
 export default function CreateAssignmentPage() {
@@ -82,148 +52,107 @@ export default function CreateAssignmentPage() {
     setGenerationQueued,
   } = useAssessmentStore()
 
-  const [step, setStep] =
-    useState<number>(1)
-
-  const [selectedTypes, setSelectedTypes] =
-    useState<QuestionType[]>(['mcq'])
-
-  const [difficulty, setDifficulty] =
-    useState<DifficultyState>({
-      easy: 33,
-      medium: 34,
-      hard: 33,
-    })
-
   const [uploading, setUploading] =
     useState(false)
 
   const [submitting, setSubmitting] =
     useState(false)
 
-  const [formError, setFormError] =
-    useState<string | null>(null)
+  const [rows, setRows] = useState<
+    QuestionRow[]
+  >([
+    {
+      id: 1,
+      label:
+        'Multiple Choice Questions',
+      questions: 4,
+      marks: 1,
+    },
+
+    {
+      id: 2,
+      label: 'Short Questions',
+      questions: 3,
+      marks: 2,
+    },
+
+    {
+      id: 3,
+      label:
+        'Diagram/Graph-Based Questions',
+      questions: 5,
+      marks: 5,
+    },
+
+    {
+      id: 4,
+      label: 'Numerical Problems',
+      questions: 5,
+      marks: 5,
+    },
+  ])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
 
     defaultValues: {
-      title: '',
       dueDate: '',
       subject: '',
       instructions: '',
-      totalQuestions: 10,
-      totalMarks: 50,
     },
   })
 
-  const values = form.watch()
+  const handleFileUpload =
+    useCallback(
+      async (
+        e: React.ChangeEvent<HTMLInputElement>
+      ) => {
+        const file =
+          e.target.files?.[0]
 
-  const diffSum =
-    difficulty.easy +
-    difficulty.medium +
-    difficulty.hard
+        if (!file) return
 
-  const toggleType = (
-    ty: QuestionType
-  ) => {
-    setSelectedTypes((prev) =>
-      prev.includes(ty)
-        ? prev.length > 1
-          ? prev.filter((t) => t !== ty)
-          : prev
-        : [...prev, ty]
+        setUploading(true)
+
+        try {
+          const res =
+            await uploadFile(file)
+
+          setUploadedFile(res.file)
+        } finally {
+          setUploading(false)
+        }
+      },
+      [setUploadedFile]
     )
-  }
 
-  const handleFileUpload = useCallback(
-    async (
-      e: React.ChangeEvent<HTMLInputElement>
-    ) => {
-      const file = e.target.files?.[0]
-
-      if (!file) return
-
-      setUploading(true)
-
-      setFormError(null)
-
-      try {
-        const res = await uploadFile(file)
-
-        setUploadedFile(res.file)
-      } catch (err: unknown) {
-        setFormError(
-          (err as Error).message ||
-            'Upload failed'
-        )
-      } finally {
-        setUploading(false)
-      }
-    },
-    [setUploadedFile]
+  const totalQuestions = rows.reduce(
+    (acc, row) =>
+      acc + row.questions,
+    0
   )
 
-  const goToNextStep = async () => {
-    setFormError(null)
-
-    if (step === 1) {
-      const isValid = await form.trigger([
-        'title',
-        'dueDate',
-        'totalQuestions',
-        'totalMarks',
-      ])
-
-      if (!isValid) return
-    }
-
-    if (
-      step === 2 &&
-      diffSum !== 100
-    ) {
-      setFormError(
-        'Difficulty percentages must add up to 100.'
-      )
-
-      return
-    }
-
-    setStep((c) =>
-      Math.min(c + 1, 3)
-    )
-  }
+  const totalMarks = rows.reduce(
+    (acc, row) =>
+      acc +
+      row.questions * row.marks,
+    0
+  )
 
   const onSubmit = async (
     data: FormValues
   ) => {
-    setFormError(null)
-
-    if (selectedTypes.length === 0) {
-      setFormError(
-        'Select at least one question type.'
-      )
-
-      return
-    }
-
-    if (diffSum !== 100) {
-      setFormError(
-        'Difficulty percentages must add up to 100.'
-      )
-
-      setStep(2)
-
-      return
-    }
-
     setSubmitting(true)
 
     try {
       const res =
         await createAssignment(
           {
-            ...data,
+            title:
+              data.subject ||
+              'Untitled Assignment',
+
+            dueDate: data.dueDate,
 
             subject:
               data.subject ?? '',
@@ -231,11 +160,19 @@ export default function CreateAssignmentPage() {
             instructions:
               data.instructions ?? '',
 
-            questionTypes:
-              selectedTypes,
+            totalQuestions,
 
-            difficultyDistribution:
-              difficulty,
+            totalMarks,
+
+            questionTypes: [
+              'mcq',
+            ] as QuestionType[],
+
+            difficultyDistribution: {
+              easy: 33,
+              medium: 34,
+              hard: 33,
+            },
           },
 
           uploadedFile ?? undefined
@@ -248,436 +185,501 @@ export default function CreateAssignmentPage() {
       router.push(
         `/assessments/${res.assignment.id}`
       )
-    } catch (err: unknown) {
-      setFormError(
-        (err as Error).message ||
-          'Failed to create assignment'
-      )
     } finally {
       setSubmitting(false)
     }
   }
 
-  const STEPS = [
-    {
-      n: 1,
-      label: 'Assignment Details',
-    },
-
-    {
-      n: 2,
-      label: 'Upload Material',
-    },
-
-    {
-      n: 3,
-      label: 'Question Setup',
-    },
-  ]
-
   return (
-    <div className="mx-auto max-w-2xl space-y-5">
+    <div className="mx-auto max-w-[1100px]">
 
-      {/* Step Bar */}
-      <div
-        className="
-          flex
-          items-center
-          gap-0
-          rounded-[14px]
-          border
-          border-[#E5E5E2]
-          bg-[hsl(48,20%,97%)]
-          p-3
-        "
-      >
-        {STEPS.map(
-          ({ n, label }, i, arr) => (
-            <div
-              key={n}
+      {/* Header */}
+      <div className="mb-6">
+
+        <div className="flex items-center gap-2">
+
+          <div className="h-2 w-2 rounded-full bg-[#53C26B]" />
+
+          <div>
+            <h1
               className="
-                flex
-                flex-1
-                items-center
+                text-[20px]
+                font-[700]
+                tracking-[-0.04em]
+                text-[#1F1F1F]
+                font-[family-name:var(--font-bricolage)]
               "
             >
-              <button
-                type="button"
-                onClick={() => setStep(n)}
-                className="
-                  flex
-                  min-w-0
-                  items-center
-                  gap-2.5
-                "
-              >
-                <span
-                  className={cn(
-                    `
-                      flex
-                      h-6
-                      w-6
-                      flex-shrink-0
-                      items-center
-                      justify-center
-                      rounded-full
-                      text-[11px]
-                      font-bold
-                      transition-all
-                    `,
+              Create Assignment
+            </h1>
 
-                    step > n
-                      ? 'bg-[hsl(160,84%,39%)] text-white'
-                      : step === n
-                      ? 'bg-[hsl(222,47%,11%)] text-white'
-                      : 'bg-[#E5E5E2] text-[hsl(215,16%,47%)]'
-                  )}
-                >
-                  {step > n ? (
-                    <Check
-                      size={11}
-                      strokeWidth={3}
-                    />
-                  ) : (
-                    n
-                  )}
-                </span>
+            <p
+              className="
+                mt-1
+                text-[12px]
+                text-[#8A8A8A]
+              "
+            >
+              Set up a new assignment for
+              your students
+            </p>
+          </div>
+        </div>
 
-                <span
-                  className={cn(
-                    `
-                      truncate
-                      text-[12.5px]
-                    `,
-
-                    step === n
-                      ? 'font-semibold text-[hsl(222,47%,11%)]'
-                      : 'text-[hsl(215,16%,47%)]'
-                  )}
-                >
-                  {label}
-                </span>
-              </button>
-
-              {i < arr.length - 1 && (
-                <ChevronRight
-                  size={14}
-                  className="
-                    mx-2
-                    flex-shrink-0
-                    text-[#D0D0CB]
-                  "
-                />
-              )}
-            </div>
-          )
-        )}
-      </div>
-
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4"
-      >
-
-        {/* STEP 1 */}
-        {step === 1 && (
+        {/* Progress */}
+        <div
+          className="
+            mt-6
+            h-[4px]
+            w-full
+            rounded-full
+            bg-[#D9D9D9]
+          "
+        >
           <div
             className="
-              overflow-hidden
-              rounded-[14px]
+              h-full
+              w-[50%]
+              rounded-full
+              bg-[#555555]
+            "
+          />
+        </div>
+      </div>
+
+      {/* Card */}
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+
+        <div
+          className="
+            mx-auto
+            max-w-[680px]
+            rounded-[24px]
+            bg-[#F5F5F5]
+            px-6
+            py-5
+          "
+        >
+
+          {/* Section */}
+          <div className="mb-5">
+
+            <h2
+              className="
+                text-[16px]
+                font-[700]
+                text-[#1F1F1F]
+              "
+            >
+              Assignment Details
+            </h2>
+
+            <p
+              className="
+                mt-1
+                text-[11px]
+                text-[#9A9A9A]
+              "
+            >
+              Basic information about your
+              assignment
+            </p>
+          </div>
+
+          {/* Upload */}
+          <div
+            className="
+              flex
+              flex-col
+              items-center
+              justify-center
+              rounded-[20px]
               border
-              border-[#E5E5E2]
-              bg-white
-              shadow-[0_1px_3px_rgba(0,0,0,0.05)]
+              border-dashed
+              border-[#D5D5D5]
+              bg-[#FAFAFA]
+              px-6
+              py-10
+              text-center
             "
           >
 
-            <div
+            <UploadCloud
+              size={26}
+              className="mb-3 text-[#3A3A3A]"
+            />
+
+            <p
               className="
-                border-b
-                border-[#F0EFE8]
-                bg-[hsl(48,20%,98%)]
-                px-5
-                py-3.5
+                text-[13px]
+                font-medium
+                text-[#2A2A2A]
               "
             >
+              Choose a file or drag &
+              drop it here
+            </p>
+
+            <p
+              className="
+                mt-1
+                text-[11px]
+                text-[#A0A0A0]
+              "
+            >
+              JPEG, PNG, upto 10MB
+            </p>
+
+            <label
+              className="
+                mt-4
+                inline-flex
+                cursor-pointer
+                items-center
+                justify-center
+                rounded-full
+                bg-[#EAEAEA]
+                px-5
+                py-2
+                text-[12px]
+                font-medium
+                text-[#3A3A3A]
+              "
+            >
+              Browse Files
+
+              <input
+                type="file"
+                className="hidden"
+                onChange={
+                  handleFileUpload
+                }
+              />
+            </label>
+
+            {uploading && (
+              <p className="mt-3 text-[12px] text-[#7A7A7A]">
+                Uploading...
+              </p>
+            )}
+          </div>
+
+          <p
+            className="
+              mt-3
+              text-center
+              text-[11px]
+              text-[#9A9A9A]
+            "
+          >
+            Upload images of your preferred
+            document/image
+          </p>
+
+          {/* Due Date */}
+          <div className="mt-5">
+
+            <label
+              className="
+                mb-2
+                block
+                text-[12px]
+                font-semibold
+                text-[#2A2A2A]
+              "
+            >
+              Due Date
+            </label>
+
+            <input
+              type="date"
+              {...form.register('dueDate')}
+              className="
+                h-[42px]
+                w-full
+                rounded-full
+                border
+                border-[#E2E2E2]
+                bg-white
+                px-4
+                text-[13px]
+                outline-none
+              "
+            />
+          </div>
+
+          {/* Question Rows */}
+          <div className="mt-5">
+
+            <div
+              className="
+                mb-2
+                grid
+                grid-cols-[1fr_120px_80px]
+                gap-3
+                px-1
+              "
+            >
+
               <p
                 className="
-                  text-[11px]
+                  text-[12px]
                   font-semibold
-                  uppercase
-                  tracking-[0.07em]
-                  text-[hsl(215,16%,55%)]
+                  text-[#2A2A2A]
                 "
               >
-                Basic Info
+                Question Type
+              </p>
+
+              <p
+                className="
+                  text-center
+                  text-[12px]
+                  font-semibold
+                  text-[#2A2A2A]
+                "
+              >
+                No. of Questions
+              </p>
+
+              <p
+                className="
+                  text-center
+                  text-[12px]
+                  font-semibold
+                  text-[#2A2A2A]
+                "
+              >
+                Marks
               </p>
             </div>
 
-            <div className="space-y-4 p-5">
+            <div className="space-y-2">
 
-              {/* Title */}
-              <div>
-                <label
+              {rows.map((row) => (
+                <div
+                  key={row.id}
                   className="
-                    mb-1.5
-                    block
-                    text-[12px]
-                    font-semibold
-                    text-[hsl(215,16%,40%)]
+                    grid
+                    grid-cols-[1fr_120px_80px]
+                    gap-3
                   "
                 >
-                  Assignment Title *
-                </label>
 
-                <input
-                  {...form.register('title')}
-                  placeholder="e.g. Quiz on Electricity"
-                  className="
-                    w-full
-                    rounded-xl
-                    border
-                    border-[#E5E5E2]
-                    px-3.5
-                    py-2.5
-                    text-[13.5px]
-                    transition-all
-                    focus:border-[hsl(222,47%,11%)]/40
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-[hsl(222,47%,11%)]/10
-                  "
-                />
-
-                {form.formState.errors.title && (
-                  <p
+                  {/* Select */}
+                  <div
                     className="
-                      mt-1
-                      text-[11.5px]
-                      text-red-500
+                      flex
+                      h-[38px]
+                      items-center
+                      justify-between
+                      rounded-full
+                      bg-white
+                      px-4
                     "
                   >
-                    {
-                      form.formState.errors
-                        .title.message
-                    }
-                  </p>
-                )}
-              </div>
 
-              {/* Subject + Date */}
-              <div className="grid grid-cols-2 gap-3">
+                    <span className="text-[12px] text-[#2A2A2A]">
+                      {row.label}
+                    </span>
 
-                {/* Subject */}
-                <div>
-                  <label
+                    <X
+                      size={13}
+                      className="text-[#A0A0A0]"
+                    />
+                  </div>
+
+                  {/* Questions */}
+                  <div
                     className="
-                      mb-1.5
-                      block
+                      flex
+                      h-[38px]
+                      items-center
+                      justify-center
+                      rounded-full
+                      bg-white
                       text-[12px]
-                      font-semibold
-                      text-[hsl(215,16%,40%)]
                     "
                   >
-                    Subject
-                  </label>
+                    -
+                    <span className="mx-3">
+                      {row.questions}
+                    </span>
+                    +
+                  </div>
 
-                  <input
-                    type="text"
-                    {...form.register(
-                      'subject'
-                    )}
-                    placeholder="e.g. Physics"
+                  {/* Marks */}
+                  <div
                     className="
-                      w-full
-                      rounded-xl
-                      border
-                      border-[#E5E5E2]
-                      px-3.5
-                      py-2.5
-                      text-[13.5px]
-                      transition-all
-                      focus:border-[hsl(222,47%,11%)]/40
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-[hsl(222,47%,11%)]/10
-                    "
-                  />
-                </div>
-
-                {/* Due Date */}
-                <div>
-                  <label
-                    className="
-                      mb-1.5
-                      block
+                      flex
+                      h-[38px]
+                      items-center
+                      justify-center
+                      rounded-full
+                      bg-white
                       text-[12px]
-                      font-semibold
-                      text-[hsl(215,16%,40%)]
                     "
                   >
-                    Due Date *
-                  </label>
-
-                  <input
-                    type="date"
-                    {...form.register(
-                      'dueDate'
-                    )}
-                    className="
-                      w-full
-                      rounded-xl
-                      border
-                      border-[#E5E5E2]
-                      px-3.5
-                      py-2.5
-                      text-[13.5px]
-                      transition-all
-                      focus:border-[hsl(222,47%,11%)]/40
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-[hsl(222,47%,11%)]/10
-                    "
-                  />
-
-                  {form.formState.errors
-                    .dueDate && (
-                    <p
-                      className="
-                        mt-1
-                        text-[11.5px]
-                        text-red-500
-                      "
-                    >
-                      {
-                        form.formState.errors
-                          .dueDate.message
-                      }
-                    </p>
-                  )}
+                    -
+                    <span className="mx-3">
+                      {row.marks}
+                    </span>
+                    +
+                  </div>
                 </div>
-              </div>
-
-              {/* Marks + Questions */}
-              <div className="grid grid-cols-2 gap-3">
-
-                <div>
-                  <label
-                    className="
-                      mb-1.5
-                      block
-                      text-[12px]
-                      font-semibold
-                      text-[hsl(215,16%,40%)]
-                    "
-                  >
-                    Total Marks
-                  </label>
-
-                  <input
-                    type="number"
-                    {...form.register(
-                      'totalMarks',
-                      {
-                        valueAsNumber: true,
-                      }
-                    )}
-                    className="
-                      w-full
-                      rounded-xl
-                      border
-                      border-[#E5E5E2]
-                      px-3.5
-                      py-2.5
-                      text-[13.5px]
-                      transition-all
-                      focus:border-[hsl(222,47%,11%)]/40
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-[hsl(222,47%,11%)]/10
-                    "
-                  />
-                </div>
-
-                <div>
-                  <label
-                    className="
-                      mb-1.5
-                      block
-                      text-[12px]
-                      font-semibold
-                      text-[hsl(215,16%,40%)]
-                    "
-                  >
-                    Number of Questions
-                  </label>
-
-                  <input
-                    type="number"
-                    {...form.register(
-                      'totalQuestions',
-                      {
-                        valueAsNumber: true,
-                      }
-                    )}
-                    className="
-                      w-full
-                      rounded-xl
-                      border
-                      border-[#E5E5E2]
-                      px-3.5
-                      py-2.5
-                      text-[13.5px]
-                      transition-all
-                      focus:border-[hsl(222,47%,11%)]/40
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-[hsl(222,47%,11%)]/10
-                    "
-                  />
-                </div>
-              </div>
-
-              {/* Instructions */}
-              <div>
-                <label
-                  className="
-                    mb-1.5
-                    block
-                    text-[12px]
-                    font-semibold
-                    text-[hsl(215,16%,40%)]
-                  "
-                >
-                  Additional Instructions
-                </label>
-
-                <textarea
-                  {...form.register(
-                    'instructions'
-                  )}
-                  rows={3}
-                  placeholder="e.g. Focus on neural networks…"
-                  className="
-                    w-full
-                    resize-none
-                    rounded-xl
-                    border
-                    border-[#E5E5E2]
-                    px-3.5
-                    py-2.5
-                    text-[13.5px]
-                    transition-all
-                    focus:border-[hsl(222,47%,11%)]/40
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-[hsl(222,47%,11%)]/10
-                  "
-                />
-              </div>
+              ))}
             </div>
+
+            {/* Add */}
+            <button
+              type="button"
+              className="
+                mt-4
+                flex
+                items-center
+                gap-2
+                text-[12px]
+                text-[#2A2A2A]
+              "
+            >
+
+              <div
+                className="
+                  flex
+                  h-5
+                  w-5
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-[#2F2F2F]
+                  text-white
+                "
+              >
+                <Plus size={12} />
+              </div>
+
+              Add Question Type
+            </button>
           </div>
-        )}
+
+          {/* Totals */}
+          <div
+            className="
+              mt-6
+              text-right
+              text-[12px]
+              leading-6
+              text-[#3A3A3A]
+            "
+          >
+            <p>
+              Total Questions:{' '}
+              {totalQuestions}
+            </p>
+
+            <p>
+              Total Marks:{' '}
+              {totalMarks}
+            </p>
+          </div>
+
+          {/* Additional Info */}
+          <div className="mt-6">
+
+            <label
+              className="
+                mb-2
+                block
+                text-[12px]
+                font-semibold
+                text-[#2A2A2A]
+              "
+            >
+              Additional Information (For
+              better output)
+            </label>
+
+            <textarea
+              {...form.register(
+                'instructions'
+              )}
+              rows={4}
+              placeholder="e.g Generate a question paper for 3 hour exam duration..."
+              className="
+                w-full
+                rounded-[18px]
+                border
+                border-[#E2E2E2]
+                bg-white
+                px-4
+                py-3
+                text-[13px]
+                outline-none
+                placeholder:text-[#B0B0B0]
+              "
+            />
+          </div>
+        </div>
+
+        {/* Footer Buttons */}
+        <div
+          className="
+            mx-auto
+            mt-5
+            flex
+            max-w-[680px]
+            items-center
+            justify-between
+          "
+        >
+
+          <button
+            type="button"
+            className="
+              inline-flex
+              h-[40px]
+              items-center
+              gap-2
+              rounded-full
+              border
+              border-[#D9D9D9]
+              bg-white
+              px-5
+              text-[13px]
+              text-[#2A2A2A]
+            "
+          >
+
+            <ArrowLeft size={14} />
+
+            Previous
+          </button>
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className="
+              inline-flex
+              h-[40px]
+              items-center
+              gap-2
+              rounded-full
+              bg-[#0B1736]
+              px-5
+              text-[13px]
+              font-medium
+              text-white
+            "
+          >
+            {submitting
+              ? 'Creating...'
+              : 'Next'}
+
+            <ArrowRight size={14} />
+          </button>
+        </div>
       </form>
     </div>
   )

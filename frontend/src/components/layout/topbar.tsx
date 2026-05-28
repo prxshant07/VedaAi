@@ -27,30 +27,32 @@ export function Topbar({
         className="
           mx-auto
           flex
-          h-14
+          h-[56px]
           max-w-[1100px]
           items-center
           justify-between
-          rounded-2xl
+          rounded-[16px]
           border
-          border-zinc-200
-          bg-white
-          pl-6
-          pr-3
-          shadow-[0_1px_2px_rgba(0,0,0,0.03)]
+          border-[#ECECEC]
+          bg-[#F8F8F8]
+          px-[24px]
+          pr-[12px]
         "
       >
 
         {/* Left */}
         <div className="min-w-0">
+
           {pageTitle && (
             <h1
               className="
                 truncate
-                text-[15px]
-                font-semibold
-                tracking-[-0.02em]
-                text-zinc-900
+                text-[14px]
+                font-[700]
+                leading-none
+                tracking-[-0.03em]
+                text-[#1F1F1F]
+                font-[family-name:var(--font-bricolage)]
               "
             >
               {pageTitle}
@@ -60,10 +62,13 @@ export function Topbar({
           {pageSubtitle && (
             <p
               className="
-                mt-0.5
+                mt-1
                 truncate
-                text-[12px]
-                text-zinc-500
+                text-[11px]
+                font-[400]
+                leading-none
+                text-[#7A7A7A]
+                font-[family-name:var(--font-bricolage)]
               "
             >
               {pageSubtitle}
@@ -72,20 +77,29 @@ export function Topbar({
         </div>
 
         {/* Right */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-[10px]">
 
           {/* Search */}
-          <div className="relative hidden md:flex">
+          <div
+            className="
+              relative
+              hidden
+              md:flex
+              h-[40px]
+              w-[801px]
+              items-center
+              gap-[8px]
+              rounded-[16px]
+              border
+              border-[#E7E7E7]
+              bg-white
+              px-[14px]
+            "
+          >
 
             <Search
               size={15}
-              className="
-                absolute
-                left-3
-                top-1/2
-                -translate-y-1/2
-                text-zinc-400
-              "
+              className="text-[#9A9A9A]"
             />
 
             <input
@@ -96,23 +110,12 @@ export function Topbar({
               }
               placeholder="Search assignments..."
               className="
-                h-10
-                w-60
-                rounded-xl
-                border
-                border-zinc-200
-                bg-zinc-50
-                pl-9
-                pr-4
+                w-full
+                bg-transparent
                 text-[13px]
-                text-zinc-700
+                text-[#2A2A2A]
                 outline-none
-                transition-all
-                placeholder:text-zinc-400
-                focus:border-zinc-300
-                focus:bg-white
-                focus:ring-4
-                focus:ring-zinc-100
+                placeholder:text-[#9A9A9A]
               "
             />
           </div>
@@ -122,33 +125,31 @@ export function Topbar({
             className="
               relative
               flex
-              h-10
-              w-10
+              h-[40px]
+              w-[40px]
               items-center
               justify-center
-              rounded-xl
+              rounded-[14px]
               border
-              border-zinc-200
+              border-[#E7E7E7]
               bg-white
-              text-zinc-500
-              transition-all
-              hover:bg-zinc-100
-              hover:text-zinc-900
             "
           >
-            <Bell size={17} />
+
+            <Bell
+              size={16}
+              className="text-[#5F5F5F]"
+            />
 
             <span
               className="
                 absolute
-                right-2
-                top-2
-                h-2
-                w-2
+                right-[10px]
+                top-[10px]
+                h-[7px]
+                w-[7px]
                 rounded-full
                 bg-[#FF5A36]
-                ring-2
-                ring-white
               "
             />
           </button>
@@ -157,37 +158,35 @@ export function Topbar({
           <button
             className="
               flex
-              h-10
-              w-10
+              h-[40px]
+              w-[40px]
               items-center
               justify-center
-              rounded-xl
+              rounded-[14px]
               border
-              border-zinc-200
+              border-[#E7E7E7]
               bg-white
-              text-zinc-500
-              transition-all
-              hover:bg-zinc-100
-              hover:text-zinc-900
             "
           >
-            <Settings size={17} />
+
+            <Settings
+              size={16}
+              className="text-[#5F5F5F]"
+            />
           </button>
 
           {/* Profile */}
           <button
             className="
               flex
-              h-10
+              h-[40px]
               items-center
               gap-2
-              rounded-xl
+              rounded-[14px]
               border
-              border-zinc-200
+              border-[#E7E7E7]
               bg-white
-              px-3
-              transition-all
-              hover:bg-zinc-100
+              px-[12px]
             "
           >
 
@@ -202,7 +201,7 @@ export function Topbar({
                 rounded-full
                 bg-[#0B1736]
                 text-[11px]
-                font-semibold
+                font-bold
                 text-[#FFD84D]
               "
             >
@@ -212,11 +211,9 @@ export function Topbar({
             {/* Name */}
             <span
               className="
-                hidden
                 text-[13px]
-                font-medium
-                text-zinc-900
-                lg:block
+                font-[500]
+                text-[#1F1F1F]
               "
             >
               John Doe
@@ -224,7 +221,7 @@ export function Topbar({
 
             <ChevronDown
               size={14}
-              className="text-zinc-400"
+              className="text-[#8A8A8A]"
             />
           </button>
 

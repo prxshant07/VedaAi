@@ -82,9 +82,11 @@ export function Sidebar() {
           {/* Fixed Logo Container */}
           <div
             className="
+              relative
+              top-[2px]
               flex
-              h-[42px]
-              w-[42px]
+              h-[50px]
+              w-[50px]
               items-center
               justify-center
               flex-shrink-0
@@ -95,8 +97,8 @@ export function Sidebar() {
               src="/illustrations/logo2.png"
               alt="VedaAI"
               className="
-                h-[32px]
-                w-[32px]
+                h-[40px]
+                w-[40px]
                 object-contain
               "
             />
@@ -207,25 +209,7 @@ export function Sidebar() {
                   {item.label}
                 </span>
 
-                {item.badge && (
-                  <span
-                    className="
-                      flex
-                      h-[22px]
-                      min-w-[22px]
-                      items-center
-                      justify-center
-                      rounded-full
-                      bg-[#FF5A36]
-                      px-[6px]
-                      text-[10px]
-                      font-semibold
-                      text-white
-                    "
-                  >
-                    6
-                  </span>
-                )}
+                {item.badge}
               </Link>
             )
           })}
@@ -285,10 +269,11 @@ export function Sidebar() {
                 items-center
                 justify-center
                 rounded-full
-                bg-[#0B1736]
+              bg-[#0B1736]
                 text-[14px]
                 font-bold
-                text-[#FFD84D]
+              text-[#FFD84D]
+                flex-shrink-0
               "
             >
               DP

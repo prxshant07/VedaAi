@@ -17,6 +17,9 @@ interface AssignmentCardV2Props {
   progress?: number
   createdAt?: string
   dueDate?: string
+
+  // NEW
+  onDelete?: (id: string) => void
 }
 
 export function AssignmentCardV2({
@@ -24,6 +27,7 @@ export function AssignmentCardV2({
   title,
   createdAt = '20-06-2025',
   dueDate = '21-06-2025',
+  onDelete,
 }: AssignmentCardV2Props) {
   return (
     <div
@@ -174,11 +178,7 @@ export function AssignmentCardV2({
         "
       >
 
-        {/* IMPORTANT:
-            Keep internal route as /assessments
-            because backend + dynamic pages still use it.
-            Only UI wording changed to Assignments.
-        */}
+        {/* View */}
         <Link
           href={
             id
@@ -201,7 +201,13 @@ export function AssignmentCardV2({
           View Assignment
         </Link>
 
+        {/* Delete */}
         <button
+          onClick={() => {
+            if (id && onDelete) {
+              onDelete(id)
+            }
+          }}
           className="
             flex
             h-[38px]

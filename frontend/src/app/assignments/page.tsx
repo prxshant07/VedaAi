@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 import {
   Search,
@@ -9,7 +10,6 @@ import {
   Trash2,
   ArrowRight,
   Plus,
-  FileText,
   Clock3,
 } from 'lucide-react'
 
@@ -104,7 +104,6 @@ function AssignmentCard({
       "
     >
 
-      {/* Header */}
       <div className="mb-4 flex items-start justify-between gap-3">
 
         <Link
@@ -142,14 +141,12 @@ function AssignmentCard({
         </span>
       </div>
 
-      {/* Subject */}
       {assignment.subject && (
         <p className="mb-4 text-[13px] text-zinc-500">
           {assignment.subject}
         </p>
       )}
 
-      {/* Stats */}
       <div className="mb-4 grid grid-cols-2 gap-3">
 
         <div
@@ -161,12 +158,8 @@ function AssignmentCard({
             p-3
           "
         >
-          <div className="mb-1 flex items-center gap-1.5 text-zinc-500">
-            <FileText size={13} />
-
-            <span className="text-[11px] font-medium">
-              Questions
-            </span>
+          <div className="mb-1 text-[11px] font-medium text-zinc-500">
+            Questions
           </div>
 
           <p className="text-[16px] font-bold text-zinc-900">
@@ -197,7 +190,6 @@ function AssignmentCard({
         </div>
       </div>
 
-      {/* Question Types */}
       <div className="mb-4 flex flex-wrap gap-2">
         {assignment.questionTypes.map((type) => (
           <span
@@ -219,7 +211,6 @@ function AssignmentCard({
         ))}
       </div>
 
-      {/* Difficulty */}
       <div className="mb-5 flex h-1.5 gap-1 overflow-hidden rounded-full">
         {(
           ['easy', 'medium', 'hard'] as const
@@ -248,7 +239,6 @@ function AssignmentCard({
         })}
       </div>
 
-      {/* Footer */}
       <div className="flex items-center justify-between border-t border-zinc-100 pt-4">
 
         <p className="text-[12px] text-zinc-400">
@@ -425,113 +415,97 @@ export default function AssignmentsPage() {
         matchesSearch && matchesStatus
       )
     })
-    .sort((a, b) => {
-      if (sortBy === 'title')
-        return a.title.localeCompare(
-          b.title
-        )
-
-      if (sortBy === 'totalQuestions')
-        return (
-          b.totalQuestions -
-          a.totalQuestions
-        )
-
-      return (
-        new Date(b.createdAt).getTime() -
-        new Date(a.createdAt).getTime()
-      )
-    })
-
-  const statusCounts = {
-    all: assignments.length,
-
-    completed: assignments.filter(
-      (a) => a.status === 'completed'
-    ).length,
-
-    processing: assignments.filter(
-      (a) => a.status === 'processing'
-    ).length,
-
-    queued: assignments.filter(
-      (a) => a.status === 'queued'
-    ).length,
-
-    failed: assignments.filter(
-      (a) => a.status === 'failed'
-    ).length,
-  }
-
-  const TAB_LABELS: Record<
-    FilterStatus,
-    string
-  > = {
-    all: 'All',
-    completed: 'Active',
-    processing: 'Processing',
-    queued: 'Queued',
-    failed: 'Failed',
-  }
 
   return (
     <div className="flex h-full flex-col">
 
-      {/* SHOW TOOLBAR ONLY WHEN ASSIGNMENTS EXIST */}
-      {assignments.length > 0 && (
-        <div className="space-y-5">
+      {filtered.length === 0 ? (
+        <div className="flex flex-1 items-center justify-center pb-24">
 
-          {/* Tabs */}
-          <div className="flex gap-0 border-b border-zinc-200">
-            {(
-              Object.keys(
-                TAB_LABELS
-              ) as FilterStatus[]
-            ).map((status) => (
-              <button
-                key={status}
-                onClick={() =>
-                  setFilterStatus(status)
-                }
-                className={`
-                  -mb-px
-                  border-b-2
-                  px-4
-                  py-2.5
-                  text-[13.5px]
-                  font-medium
-                  transition-all
-                  ${
-                    filterStatus === status
-                      ? 'border-zinc-900 text-zinc-900'
-                      : 'border-transparent text-zinc-500 hover:text-zinc-900'
-                  }
-                `}
-              >
-                {TAB_LABELS[status]}
+          <div className="mx-auto flex max-w-[520px] flex-col items-center text-center">
 
-                {status === 'all' && (
-                  <span
-                    className="
-                      ml-1.5
-                      rounded-full
-                      bg-zinc-900
-                      px-1.5
-                      py-0.5
-                      text-[11px]
-                      font-semibold
-                      text-white
-                    "
-                  >
-                    {statusCounts.all}
-                  </span>
-                )}
-              </button>
-            ))}
+            {/* Illustration */}
+            <div
+              className="
+                mb-10
+                flex
+                items-center
+                justify-center
+              "
+            >
+              <Image
+                src="/illustrations/Illustrations.png"
+                alt="No assignments illustration"
+                width={300}
+                height={300}
+                priority
+                className="object-contain"
+              />
+            </div>
+
+            <h3
+              className="
+                mb-4
+                w-[181px]
+                text-center
+                font-[700]
+                text-[20px]
+                leading-[140%]
+                tracking-[-0.04em]
+              text-[#303030]
+                font-[family-name:var(--font-bricolage)]
+              "
+            >
+              No assignments yet
+            </h3>
+
+            <p
+              className="
+                mb-10
+                w-[486px]
+                text-center
+                font-[400]
+                text-[16px]
+                leading-[140%]
+                tracking-[-0.04em]
+              text-[#5E5E5ECC]
+                font-[family-name:var(--font-bricolage)]
+              "
+            >
+              Create your first assignment to start collecting and grading student 
+              submissions. You can set up rubrics, define marking criteria, and let AI 
+              assist with grading.
+            </p>
+
+            <Link
+              href="/assignments/create"
+              className="
+                inline-flex
+                h-14
+                items-center
+                justify-center
+                gap-2
+                rounded-2xl
+                bg-[#0B1736]
+                px-7
+                text-[15px]
+                font-semibold
+                text-white
+                transition-all
+                duration-200
+                hover:opacity-90
+              "
+            >
+              <Plus size={17} />
+
+              Create Your First Assignment
+            </Link>
           </div>
-
+        </div>
+      ) : (
+        <>
           {/* Toolbar */}
-          <div className="flex items-center justify-between gap-3">
+          <div className="mb-5 flex items-center justify-between gap-3">
 
             <div className="flex items-center gap-3">
 
@@ -575,63 +549,8 @@ export default function AssignmentsPage() {
                   "
                 />
               </div>
-
-              {/* Sort */}
-              <div className="relative">
-
-                <ArrowUpDown
-                  size={13}
-                  className="
-                    absolute
-                    left-3
-                    top-1/2
-                    -translate-y-1/2
-                    text-zinc-400
-                  "
-                />
-
-                <select
-                  value={sortBy}
-                  onChange={(e) =>
-                    setSortBy(
-                      e.target
-                        .value as SortKey
-                    )
-                  }
-                  className="
-                    h-10
-                    cursor-pointer
-                    appearance-none
-                    rounded-xl
-                    border
-                    border-zinc-200
-                    bg-white
-                    pl-9
-                    pr-8
-                    text-[13px]
-                    outline-none
-                    transition-all
-                    focus:border-zinc-300
-                    focus:ring-4
-                    focus:ring-zinc-100
-                  "
-                >
-                  <option value="createdAt">
-                    Newest
-                  </option>
-
-                  <option value="title">
-                    Title
-                  </option>
-
-                  <option value="totalQuestions">
-                    Questions
-                  </option>
-                </select>
-              </div>
             </div>
 
-            {/* CTA */}
             <Link
               href="/assignments/create"
               className="
@@ -654,118 +573,18 @@ export default function AssignmentsPage() {
               Create Assignment
             </Link>
           </div>
-        </div>
-      )}
 
-      {/* Content */}
-      {assignmentsLoading ? (
-        <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {[...Array(6)].map((_, i) => (
-            <div
-              key={i}
-              className="
-                skeleton-shimmer
-                h-[300px]
-                rounded-2xl
-              "
-            />
-          ))}
-        </div>
-      ) : filtered.length === 0 ? (
-
-        /* Empty State */
-        <div className="flex flex-1 items-center justify-center pb-24">
-
-          <div className="mx-auto flex max-w-[460px] flex-col items-center text-center">
-
-            <div
-              className="
-                mb-10
-                flex
-                h-36
-                w-36
-                items-center
-                justify-center
-                rounded-[40px]
-                bg-zinc-50
-              "
-            >
-              <FileText
-                size={58}
-                className="text-zinc-400"
-                strokeWidth={1.6}
+          {/* Grid */}
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {filtered.map((assignment) => (
+              <AssignmentCard
+                key={assignment._id}
+                assignment={assignment}
+                onDelete={handleDelete}
               />
-            </div>
-
-            <h3
-              className="
-                mb-4
-                text-[42px]
-                font-bold
-                leading-[1]
-                tracking-[-0.06em]
-                text-zinc-900
-              "
-            >
-              {search ||
-              filterStatus !== 'all'
-                ? 'No Matching Assignments'
-                : 'No assignments yet'}
-            </h3>
-
-            <p
-              className="
-                mb-10
-                max-w-[520px]
-                text-[16px]
-                leading-[1.8]
-                text-zinc-500
-              "
-            >
-              {search ||
-              filterStatus !== 'all'
-                ? 'Try adjusting your search or filters.'
-                : 'Create your first assignment to start collecting and grading student submissions. You can set up rubrics, define marking criteria, and let AI assist with grading.'}
-            </p>
-
-            {!search &&
-              filterStatus === 'all' && (
-                <Link
-                  href="/assignments/create"
-                  className="
-                    inline-flex
-                    h-14
-                    items-center
-                    justify-center
-                    gap-2
-                    rounded-2xl
-                    bg-[#0B1736]
-                    px-7
-                    text-[15px]
-                    font-semibold
-                    text-white
-                    transition-all
-                    duration-200
-                    hover:opacity-90
-                  "
-                >
-                  <Plus size={17} />
-
-                  Create Your First Assignment
-                </Link>
-              )}
+            ))}
           </div>
-        </div>
-      ) : (
-        <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {filtered.map((assignment) => (
-            <AssignmentCard
-              key={assignment._id}
-              assignment={assignment}
-              onDelete={handleDelete}
-            />
-          ))}
-        </div>
+        </>
       )}
     </div>
   )

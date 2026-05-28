@@ -115,7 +115,13 @@ export function AssignmentCardV2({
               text-[#7A7A7A]
             "
           >
-            {new Date(createdAt).toLocaleDateString('en-GB')}
+            {createdAt
+              ? new Date(
+                  createdAt
+                ).toLocaleDateString(
+                  'en-GB'
+                )
+              : '--'}
           </span>
         </div>
 
@@ -141,7 +147,13 @@ export function AssignmentCardV2({
               text-[#7A7A7A]
             "
           >
-            {new Date(dueDate).toLocaleDateString('en-GB')}
+            {dueDate
+              ? new Date(
+                  dueDate
+                ).toLocaleDateString(
+                  'en-GB'
+                )
+              : '--'}
           </span>
         </div>
       </div>
@@ -162,10 +174,15 @@ export function AssignmentCardV2({
         "
       >
 
+        {/* IMPORTANT:
+            Keep internal route as /assessments
+            because backend + dynamic pages still use it.
+            Only UI wording changed to Assignments.
+        */}
         <Link
           href={
             id
-              ? `/assignments/${id}`
+              ? `/assessments/${id}`
               : '#'
           }
           className="

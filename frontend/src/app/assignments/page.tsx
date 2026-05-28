@@ -475,185 +475,191 @@ export default function AssignmentsPage() {
   }
 
   return (
-    <div className="flex h-full flex-col space-y-5">
+    <div className="flex h-full flex-col">
 
-      {/* Tabs */}
-      <div className="flex gap-0 border-b border-zinc-200">
-        {(
-          Object.keys(
-            TAB_LABELS
-          ) as FilterStatus[]
-        ).map((status) => (
-          <button
-            key={status}
-            onClick={() =>
-              setFilterStatus(status)
-            }
-            className={`
-              -mb-px
-              border-b-2
-              px-4
-              py-2.5
-              text-[13.5px]
-              font-medium
-              transition-all
-              ${
-                filterStatus === status
-                  ? 'border-zinc-900 text-zinc-900'
-                  : 'border-transparent text-zinc-500 hover:text-zinc-900'
-              }
-            `}
-          >
-            {TAB_LABELS[status]}
+      {/* SHOW TOOLBAR ONLY WHEN ASSIGNMENTS EXIST */}
+      {assignments.length > 0 && (
+        <div className="space-y-5">
 
-            {status === 'all' && (
-              <span
-                className="
-                  ml-1.5
-                  rounded-full
-                  bg-zinc-900
-                  px-1.5
-                  py-0.5
-                  text-[11px]
-                  font-semibold
-                  text-white
-                "
+          {/* Tabs */}
+          <div className="flex gap-0 border-b border-zinc-200">
+            {(
+              Object.keys(
+                TAB_LABELS
+              ) as FilterStatus[]
+            ).map((status) => (
+              <button
+                key={status}
+                onClick={() =>
+                  setFilterStatus(status)
+                }
+                className={`
+                  -mb-px
+                  border-b-2
+                  px-4
+                  py-2.5
+                  text-[13.5px]
+                  font-medium
+                  transition-all
+                  ${
+                    filterStatus === status
+                      ? 'border-zinc-900 text-zinc-900'
+                      : 'border-transparent text-zinc-500 hover:text-zinc-900'
+                  }
+                `}
               >
-                {statusCounts.all}
-              </span>
-            )}
-          </button>
-        ))}
-      </div>
+                {TAB_LABELS[status]}
 
-      {/* Toolbar */}
-      <div className="flex items-center justify-between gap-3">
-
-        <div className="flex items-center gap-3">
-
-          {/* Search */}
-          <div className="relative w-[320px]">
-
-            <Search
-              size={14}
-              className="
-                absolute
-                left-3
-                top-1/2
-                -translate-y-1/2
-                text-zinc-400
-              "
-            />
-
-            <input
-              type="text"
-              placeholder="Search assignments..."
-              value={search}
-              onChange={(e) =>
-                setSearch(e.target.value)
-              }
-              className="
-                h-10
-                w-full
-                rounded-xl
-                border
-                border-zinc-200
-                bg-white
-                pl-9
-                pr-4
-                text-[13px]
-                outline-none
-                transition-all
-                placeholder:text-zinc-400
-                focus:border-zinc-300
-                focus:ring-4
-                focus:ring-zinc-100
-              "
-            />
+                {status === 'all' && (
+                  <span
+                    className="
+                      ml-1.5
+                      rounded-full
+                      bg-zinc-900
+                      px-1.5
+                      py-0.5
+                      text-[11px]
+                      font-semibold
+                      text-white
+                    "
+                  >
+                    {statusCounts.all}
+                  </span>
+                )}
+              </button>
+            ))}
           </div>
 
-          {/* Sort */}
-          <div className="relative">
+          {/* Toolbar */}
+          <div className="flex items-center justify-between gap-3">
 
-            <ArrowUpDown
-              size={13}
-              className="
-                absolute
-                left-3
-                top-1/2
-                -translate-y-1/2
-                text-zinc-400
-              "
-            />
+            <div className="flex items-center gap-3">
 
-            <select
-              value={sortBy}
-              onChange={(e) =>
-                setSortBy(
-                  e.target
-                    .value as SortKey
-                )
-              }
+              {/* Search */}
+              <div className="relative w-[320px]">
+
+                <Search
+                  size={14}
+                  className="
+                    absolute
+                    left-3
+                    top-1/2
+                    -translate-y-1/2
+                    text-zinc-400
+                  "
+                />
+
+                <input
+                  type="text"
+                  placeholder="Search assignments..."
+                  value={search}
+                  onChange={(e) =>
+                    setSearch(e.target.value)
+                  }
+                  className="
+                    h-10
+                    w-full
+                    rounded-xl
+                    border
+                    border-zinc-200
+                    bg-white
+                    pl-9
+                    pr-4
+                    text-[13px]
+                    outline-none
+                    transition-all
+                    placeholder:text-zinc-400
+                    focus:border-zinc-300
+                    focus:ring-4
+                    focus:ring-zinc-100
+                  "
+                />
+              </div>
+
+              {/* Sort */}
+              <div className="relative">
+
+                <ArrowUpDown
+                  size={13}
+                  className="
+                    absolute
+                    left-3
+                    top-1/2
+                    -translate-y-1/2
+                    text-zinc-400
+                  "
+                />
+
+                <select
+                  value={sortBy}
+                  onChange={(e) =>
+                    setSortBy(
+                      e.target
+                        .value as SortKey
+                    )
+                  }
+                  className="
+                    h-10
+                    cursor-pointer
+                    appearance-none
+                    rounded-xl
+                    border
+                    border-zinc-200
+                    bg-white
+                    pl-9
+                    pr-8
+                    text-[13px]
+                    outline-none
+                    transition-all
+                    focus:border-zinc-300
+                    focus:ring-4
+                    focus:ring-zinc-100
+                  "
+                >
+                  <option value="createdAt">
+                    Newest
+                  </option>
+
+                  <option value="title">
+                    Title
+                  </option>
+
+                  <option value="totalQuestions">
+                    Questions
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <Link
+              href="/assignments/create"
               className="
-                h-10
-                cursor-pointer
-                appearance-none
-                rounded-xl
-                border
-                border-zinc-200
-                bg-white
-                pl-9
-                pr-8
+                inline-flex
+                h-11
+                items-center
+                gap-2
+                rounded-2xl
+                bg-[#0B1736]
+                px-5
                 text-[13px]
-                outline-none
+                font-semibold
+                text-white
                 transition-all
-                focus:border-zinc-300
-                focus:ring-4
-                focus:ring-zinc-100
+                hover:opacity-90
               "
             >
-              <option value="createdAt">
-                Newest
-              </option>
+              <Plus size={15} />
 
-              <option value="title">
-                Title
-              </option>
-
-              <option value="totalQuestions">
-                Questions
-              </option>
-            </select>
+              Create Assignment
+            </Link>
           </div>
         </div>
-
-        {/* CTA */}
-        <Link
-          href="/assignments/create"
-          className="
-            inline-flex
-            h-11
-            items-center
-            gap-2
-            rounded-2xl
-            bg-[#0B1736]
-            px-5
-            text-[13px]
-            font-semibold
-            text-white
-            transition-all
-            hover:opacity-90
-          "
-        >
-          <Plus size={15} />
-
-          Create Assignment
-        </Link>
-      </div>
+      )}
 
       {/* Content */}
       {assignmentsLoading ? (
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {[...Array(6)].map((_, i) => (
             <div
               key={i}
@@ -668,35 +674,36 @@ export default function AssignmentsPage() {
       ) : filtered.length === 0 ? (
 
         /* Empty State */
-        <div className="flex flex-1 items-center justify-center">
+        <div className="flex flex-1 items-center justify-center pb-24">
 
-          <div className="mx-auto flex max-w-[420px] flex-col items-center text-center">
+          <div className="mx-auto flex max-w-[460px] flex-col items-center text-center">
 
             <div
               className="
-                mb-8
+                mb-10
                 flex
-                h-32
-                w-32
+                h-36
+                w-36
                 items-center
                 justify-center
-                rounded-[32px]
+                rounded-[40px]
                 bg-zinc-50
               "
             >
               <FileText
-                size={52}
+                size={58}
                 className="text-zinc-400"
-                strokeWidth={1.7}
+                strokeWidth={1.6}
               />
             </div>
 
             <h3
               className="
-                mb-3
-                text-[30px]
+                mb-4
+                text-[42px]
                 font-bold
-                tracking-[-0.04em]
+                leading-[1]
+                tracking-[-0.06em]
                 text-zinc-900
               "
             >
@@ -708,16 +715,17 @@ export default function AssignmentsPage() {
 
             <p
               className="
-                mb-8
-                text-[15px]
-                leading-[1.7]
+                mb-10
+                max-w-[520px]
+                text-[16px]
+                leading-[1.8]
                 text-zinc-500
               "
             >
               {search ||
               filterStatus !== 'all'
                 ? 'Try adjusting your search or filters.'
-                : 'Create your first assignment to start collecting and grading student submissions.'}
+                : 'Create your first assignment to start collecting and grading student submissions. You can set up rubrics, define marking criteria, and let AI assist with grading.'}
             </p>
 
             {!search &&
@@ -726,14 +734,14 @@ export default function AssignmentsPage() {
                   href="/assignments/create"
                   className="
                     inline-flex
-                    h-12
+                    h-14
                     items-center
                     justify-center
                     gap-2
                     rounded-2xl
                     bg-[#0B1736]
-                    px-6
-                    text-[14px]
+                    px-7
+                    text-[15px]
                     font-semibold
                     text-white
                     transition-all
@@ -741,7 +749,7 @@ export default function AssignmentsPage() {
                     hover:opacity-90
                   "
                 >
-                  <Plus size={16} />
+                  <Plus size={17} />
 
                   Create Your First Assignment
                 </Link>
@@ -749,7 +757,7 @@ export default function AssignmentsPage() {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {filtered.map((assignment) => (
             <AssignmentCard
               key={assignment._id}

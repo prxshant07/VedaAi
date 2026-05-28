@@ -1,5 +1,8 @@
 import Link from 'next/link'
-import { FileText, ArrowRight } from 'lucide-react'
+import {
+  FileText,
+  ArrowRight,
+} from 'lucide-react'
 
 interface EmptyStateProps {
   icon?: React.ReactNode
@@ -10,23 +13,131 @@ interface EmptyStateProps {
   onAction?: () => void
 }
 
-export function EmptyState({ icon, title, description, actionLabel, actionHref, onAction }: EmptyStateProps) {
+export function EmptyState({
+  icon,
+  title,
+  description,
+  actionLabel,
+  actionHref,
+  onAction,
+}: EmptyStateProps) {
   return (
-    <div className="relative overflow-hidden rounded-[14px] border border-[#E5E5E2] bg-white px-6 py-16 text-center shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-      <div className="relative z-10 mx-auto max-w-sm">
-        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[20px] bg-[hsl(48,20%,96%)] border border-[#E5E5E2] text-[hsl(215,16%,55%)]">
-          {icon ?? <FileText size={36} />}
+    <div
+      className="
+        flex
+        h-[678px]
+        items-center
+        justify-center
+      "
+    >
+      <div className="mx-auto flex max-w-[520px] flex-col items-center text-center">
+
+        {/* Illustration / Icon */}
+        <div
+          className="
+            mb-8
+            flex
+            h-28
+            w-28
+            items-center
+            justify-center
+            rounded-[28px]
+            border
+            border-zinc-200
+            bg-zinc-50
+            text-zinc-400
+          "
+        >
+          {icon ?? <FileText size={44} strokeWidth={1.8} />}
         </div>
-        <h3 className="text-[18px] font-bold text-[hsl(222,47%,11%)] mb-2">{title}</h3>
-        {description && <p className="text-[13.5px] leading-relaxed text-[hsl(215,16%,47%)] mb-6">{description}</p>}
+
+        {/* Title */}
+        <h3
+          className="
+            mb-3
+            text-[28px]
+            font-bold
+            tracking-[-0.04em]
+            text-zinc-900
+          "
+        >
+          {title}
+        </h3>
+
+        {/* Description */}
+        {description && (
+          <p
+            className="
+              mb-8
+              max-w-[440px]
+              text-[15px]
+              leading-[1.75]
+              text-zinc-500
+            "
+          >
+            {description}
+          </p>
+        )}
+
+        {/* Link CTA */}
         {actionLabel && actionHref && (
-          <Link href={actionHref} className="inline-flex items-center gap-2 rounded-xl bg-[hsl(222,47%,11%)] px-5 py-2.5 text-[13px] font-semibold text-white transition-all hover:opacity-90">
-            {actionLabel} <ArrowRight size={14} />
+          <Link
+            href={actionHref}
+            className="
+              inline-flex
+              h-12
+              items-center
+              justify-center
+              gap-2
+              rounded-2xl
+              bg-[#0B1736]
+              px-6
+              text-[14px]
+              font-semibold
+              text-white
+              transition-all
+              duration-200
+              hover:opacity-90
+              hover:shadow-[0_10px_24px_rgba(11,23,54,0.18)]
+            "
+          >
+            {actionLabel}
+
+            <ArrowRight
+              size={16}
+              strokeWidth={2.3}
+            />
           </Link>
         )}
+
+        {/* Button CTA */}
         {actionLabel && onAction && (
-          <button onClick={onAction} className="inline-flex items-center gap-2 rounded-xl bg-[hsl(222,47%,11%)] px-5 py-2.5 text-[13px] font-semibold text-white transition-all hover:opacity-90">
-            {actionLabel} <ArrowRight size={14} />
+          <button
+            onClick={onAction}
+            className="
+              inline-flex
+              h-12
+              items-center
+              justify-center
+              gap-2
+              rounded-2xl
+              bg-[#0B1736]
+              px-6
+              text-[14px]
+              font-semibold
+              text-white
+              transition-all
+              duration-200
+              hover:opacity-90
+              hover:shadow-[0_10px_24px_rgba(11,23,54,0.18)]
+            "
+          >
+            {actionLabel}
+
+            <ArrowRight
+              size={16}
+              strokeWidth={2.3}
+            />
           </button>
         )}
       </div>

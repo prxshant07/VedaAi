@@ -4,13 +4,13 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import {
-  Home,
+  LayoutGrid,
   Users,
   FileText,
   BookOpen,
-  Heart,
+  PieChart,
   Settings,
-  Plus,
+  Sparkles,
 } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
@@ -19,7 +19,7 @@ const navItems = [
   {
     href: '/',
     label: 'Home',
-    icon: Home,
+    icon: LayoutGrid,
   },
 
   {
@@ -37,22 +37,14 @@ const navItems = [
 
   {
     href: '/toolkit',
-    label: "All Teachers' Toolkit",
+    label: "AI Teacher's Toolkit",
     icon: BookOpen,
   },
 
   {
     href: '/library',
     label: 'My Library',
-    icon: Heart,
-  },
-]
-
-const bottomItems = [
-  {
-    href: '/settings',
-    label: 'Settings',
-    icon: Settings,
+    icon: PieChart,
   },
 ]
 
@@ -68,85 +60,96 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="h-full p-3">
+    <aside className="h-full p-4">
 
       <div
         className="
           flex
           h-full
-          w-[304px]
+          w-[220px]
           flex-col
           justify-between
-          rounded-[24px]
-          border
-          border-[#ECECEC]
-          bg-[#F7F7F7]
-          p-6
+          rounded-[18px]
+          bg-[#FAFAFA]
+          px-[18px]
+          py-[18px]
+          shadow-[0_20px_50px_rgba(0,0,0,0.08)]
         "
       >
 
-        {/* Top Section */}
+        {/* Top */}
         <div>
 
           {/* Logo */}
-          <div className="flex items-center gap-14">
+          <div className="flex items-center gap-[10px]">
 
             <img
               src="/illustrations/logo2.png"
-              alt="VedaAI Logo"
+              alt="VedaAI"
               className="
-                h-28
-                w-19
-                rounded-[15px]
-                object-cover
+                h-[42px]
+                w-[42px]
+                object-contain
               "
             />
 
-            <span
+            <h1
               className="
-                text-[28px]
+                text-[18px]
                 font-[700]
-                tracking-[-0.06em]
+                tracking-[-0.04em]
                 text-[#1F1F1F]
               "
             >
               VedaAI
-            </span>
+            </h1>
           </div>
 
           {/* CTA */}
-          <div className="mt-8">
+          <div className="mt-[26px]">
 
             <Link
               href="/assignments/create"
               className="
+                relative
                 flex
-                h-12
+                h-[42px]
                 w-full
                 items-center
                 justify-center
                 gap-2
-                rounded-[18px]
-                bg-[#0B1736]
-                px-5
-                text-[14px]
-                font-semibold
+                rounded-full
+                bg-[#1A1A1A]
+                text-[13px]
+                font-medium
                 text-white
-                transition-opacity
-                hover:opacity-90
               "
             >
-              <Plus
-                size={16}
-                strokeWidth={2.5}
+
+              {/* Orange Glow */}
+              <div
+                className="
+                  absolute
+                  inset-0
+                  rounded-full
+                  shadow-[0_0_0_2px_#FF6A3D,0_0_18px_rgba(255,106,61,0.55)]
+                "
               />
 
-              Create Assignment
+              <Sparkles
+                size={14}
+                strokeWidth={2.2}
+                className="relative z-10"
+              />
+
+              <span className="relative z-10">
+                Create Assignment
+              </span>
             </Link>
           </div>
 
-          {/* Navigation */}
-          <nav className="mt-8 space-y-1">
+          {/* Nav */}
+          <nav className="mt-[34px] flex flex-col gap-[6px]">
 
             {navItems.map((item) => {
               const Icon = item.icon
@@ -160,31 +163,30 @@ export function Sidebar() {
                   href={item.href}
                   className={cn(
                     `
-                      group
-                      flex
-                      h-11
-                      items-center
-                      gap-3
-                      rounded-xl
-                      px-4
-                      text-[14px]
-                      font-medium
-                      transition-all
-                      duration-150
+                    flex
+                    h-[38px]
+                    items-center
+                    gap-[12px]
+                    rounded-[10px]
+                    px-[12px]
+                    text-[13px]
+                    font-medium
+                    transition-all
                     `,
 
                     active
-                      ? 'bg-[#EFEFEF] text-[#1F1F1F]'
-                      : 'text-[#6B6B6B] hover:bg-[#EFEFEF] hover:text-[#1F1F1F]'
+                      ? 'bg-[#EFEFEF] text-[#1A1A1A]'
+                      : 'text-[#7A7A7A] hover:bg-[#F1F1F1]'
                   )}
                 >
 
                   <Icon
-                    size={18}
+                    size={16}
+                    strokeWidth={1.9}
                     className={cn(
                       active
-                        ? 'text-[#1F1F1F]'
-                        : 'text-[#8C8C8C] group-hover:text-[#1F1F1F]'
+                        ? 'text-[#1A1A1A]'
+                        : 'text-[#8A8A8A]'
                     )}
                   />
 
@@ -196,13 +198,13 @@ export function Sidebar() {
                     <span
                       className="
                         flex
-                        h-5
+                        h-[20px]
                         min-w-[20px]
                         items-center
                         justify-center
                         rounded-full
                         bg-[#FF5A36]
-                        px-1.5
+                        px-[5px]
                         text-[10px]
                         font-semibold
                         text-white
@@ -217,93 +219,65 @@ export function Sidebar() {
           </nav>
         </div>
 
-        {/* Bottom Section */}
-        <div className="space-y-4">
+        {/* Bottom */}
+        <div>
 
           {/* Settings */}
-          <div>
-            {bottomItems.map((item) => {
-              const Icon = item.icon
+          <Link
+            href="/settings"
+            className="
+              flex
+              h-[38px]
+              items-center
+              gap-[12px]
+              rounded-[10px]
+              px-[12px]
+              text-[13px]
+              font-medium
+              text-[#7A7A7A]
+              transition-all
+              hover:bg-[#F1F1F1]
+            "
+          >
 
-              const active =
-                isActive(item.href)
+            <Settings
+              size={16}
+              strokeWidth={1.9}
+              className="text-[#8A8A8A]"
+            />
 
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    `
-                      flex
-                      h-11
-                      items-center
-                      gap-3
-                      rounded-xl
-                      px-4
-                      text-[14px]
-                      font-medium
-                      transition-all
-                      duration-150
-                    `,
-
-                    active
-                      ? 'bg-[#EFEFEF] text-[#1F1F1F]'
-                      : 'text-[#6B6B6B] hover:bg-[#EFEFEF] hover:text-[#1F1F1F]'
-                  )}
-                >
-
-                  <Icon
-                    size={18}
-                    className={cn(
-                      active
-                        ? 'text-[#1F1F1F]'
-                        : 'text-[#8C8C8C]'
-                    )}
-                  />
-
-                  {item.label}
-                </Link>
-              )
-            })}
-          </div>
+            Settings
+          </Link>
 
           {/* School Card */}
           <div
             className="
-              rounded-2xl
-              border
-              border-[#E9E9E9]
-              bg-[#FAFAFA]
-              p-3
+              mt-4
+              rounded-[16px]
+              bg-[#F1F1F1]
+              p-[12px]
             "
           >
 
             <div className="flex items-center gap-3">
 
               {/* Avatar */}
-              <div
+              <img
+                src="/illustrations/avatar.png"
+                alt="School"
                 className="
-                  flex
-                  h-10
-                  w-10
-                  items-center
-                  justify-center
-                  rounded-xl
-                  bg-[#0B1736]
-                  text-[13px]
-                  font-bold
-                  text-[#FFD84D]
+                  h-[44px]
+                  w-[44px]
+                  rounded-full
+                  object-cover
                 "
-              >
-                DP
-              </div>
+              />
 
-              {/* Info */}
-              <div className="min-w-0">
+              {/* Text */}
+              <div>
 
                 <p
                   className="
-                    truncate
                     text-[13px]
                     font-semibold
                     text-[#1F1F1F]
@@ -314,12 +288,12 @@ export function Sidebar() {
 
                 <p
                   className="
-                    truncate
+                    mt-[2px]
                     text-[12px]
-                    text-[#6B6B6B]
+                    text-[#7A7A7A]
                   "
                 >
-                  Indore, M.P.
+                  Bokaro Steel City
                 </p>
               </div>
             </div>

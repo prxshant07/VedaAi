@@ -2,12 +2,11 @@
 
 import {
   Bell,
-  Search,
   Settings,
   ChevronDown,
+  ArrowLeft,
+  LayoutGrid,
 } from 'lucide-react'
-
-import { useState } from 'react'
 
 interface TopbarProps {
   pageTitle?: string
@@ -16,10 +15,7 @@ interface TopbarProps {
 
 export function Topbar({
   pageTitle,
-  pageSubtitle,
 }: TopbarProps) {
-  const [search, setSearch] = useState('')
-
   return (
     <header className="w-full">
 
@@ -41,17 +37,42 @@ export function Topbar({
       >
 
         {/* Left */}
-        <div className="min-w-0">
+        <div className="flex items-center gap-[8px] min-w-0">
 
+          {/* Back */}
+          <button
+            className="
+              flex
+              h-[24px]
+              w-[24px]
+              items-center
+              justify-center
+              rounded-full
+              transition-colors
+              hover:bg-[#ECECEC]
+            "
+          >
+            <ArrowLeft
+              size={14}
+              className="text-[#5F5F5F]"
+            />
+          </button>
+
+          {/* Page Icon */}
+          <LayoutGrid
+            size={13}
+            className="text-[#A0A0A0]"
+          />
+
+          {/* Title */}
           {pageTitle && (
             <h1
               className="
                 truncate
-                text-[14px]
-                font-[700]
+                text-[13px]
+                font-[500]
                 leading-none
-                tracking-[-0.03em]
-                text-[#1F1F1F]
+                text-[#8A8A8A]
               "
             >
               {pageTitle}
@@ -61,6 +82,7 @@ export function Topbar({
 
         {/* Right */}
         <div className="flex items-center gap-[10px]">
+
           {/* Notifications */}
           <button
             className="

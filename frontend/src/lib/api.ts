@@ -14,8 +14,6 @@ function createApiClient(): AxiosInstance {
       ? process.env.NEXT_PUBLIC_API_URL
       : '';
 
-  console.log('NEXT_PUBLIC_API_URL:', baseURL);
-
   const api = axios.create({
     baseURL,
     timeout: 30000,

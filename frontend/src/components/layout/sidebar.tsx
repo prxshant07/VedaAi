@@ -89,14 +89,14 @@ export function Sidebar() {
         <div>
 
           {/* Logo */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-14">
 
             <img
               src="/illustrations/logo2.png"
               alt="VedaAI Logo"
               className="
-                h-10
-                w-18
+                h-28
+                w-19
                 rounded-[15px]
                 object-cover
               "

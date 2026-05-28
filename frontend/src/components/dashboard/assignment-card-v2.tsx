@@ -18,7 +18,6 @@ interface AssignmentCardV2Props {
   createdAt?: string
   dueDate?: string
 
-  // NEW
   onDelete?: (id: string) => void
 }
 
@@ -62,7 +61,7 @@ export function AssignmentCardV2({
           {title}
         </h3>
 
-        {/* Menu */}
+        {/* Menu Trigger */}
         <button
           className="
             flex
@@ -119,7 +118,12 @@ export function AssignmentCardV2({
               text-[#7A7A7A]
             "
           >
-            {createdAt
+            {createdAt &&
+            !isNaN(
+              new Date(
+                createdAt
+              ).getTime()
+            )
               ? new Date(
                   createdAt
                 ).toLocaleDateString(
@@ -151,7 +155,12 @@ export function AssignmentCardV2({
               text-[#7A7A7A]
             "
           >
-            {dueDate
+            {dueDate &&
+            !isNaN(
+              new Date(
+                dueDate
+              ).getTime()
+            )
               ? new Date(
                   dueDate
                 ).toLocaleDateString(
@@ -170,11 +179,14 @@ export function AssignmentCardV2({
           top-[44px]
           hidden
           w-[140px]
+          flex-col
           rounded-[16px]
           bg-white
           p-[8px]
           shadow-[0_18px_40px_rgba(0,0,0,0.12)]
-          group-hover:block
+          group-hover:flex
+          hover:flex
+          z-50
         "
       >
 
@@ -203,7 +215,10 @@ export function AssignmentCardV2({
 
         {/* Delete */}
         <button
-          onClick={() => {
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+
             if (id && onDelete) {
               onDelete(id)
             }

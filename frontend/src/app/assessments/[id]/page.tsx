@@ -15,7 +15,6 @@ import { useAssessmentStore } from '@/store/assessmentStore'
 import {
   fetchAssignment,
   fetchAssessmentByAssignment,
-  fetchJobStatus,
   regenerateAssessment,
   downloadPDF,
 } from '@/lib/api'
@@ -33,6 +32,8 @@ import {
 } from '@/types'
 
 import { GenerationStatus } from '@/components/assessment/GenerationStatus'
+
+export const dynamic = 'force-dynamic'
 
 function QuestionItem({
   question,
@@ -110,23 +111,6 @@ function QuestionItem({
           </ul>
         )}
 
-        {(question.type === 'short' ||
-          question.type === 'long') && (
-          <div className="mb-3 space-y-2">
-            {Array.from({
-              length:
-                question.type === 'long'
-                  ? 6
-                  : 3,
-            }).map((_, i) => (
-              <div
-                key={i}
-                className="h-6 border-b border-[#E5E5E2]"
-              />
-            ))}
-          </div>
-        )}
-
         <div className="mt-2 flex items-center gap-2">
 
           <span
@@ -153,11 +137,7 @@ function QuestionItem({
               text-[hsl(215,16%,55%)]
             "
           >
-            [{question.marks} mark
-            {question.marks !== 1
-              ? 's'
-              : ''}
-            ]
+            [{question.marks} marks]
           </span>
         </div>
       </div>
@@ -244,88 +224,31 @@ function PaperView({
       "
     >
 
-      {/* Header */}
-      <div className="mb-5 flex items-center gap-4 border-b-2 border-[hsl(222,47%,11%)] pb-5">
+      <div className="mb-5 border-b-2 border-[#111] pb-5">
 
-        <div
+        <h2
           className="
-            flex
-            h-14
-            w-14
-            flex-shrink-0
-            items-center
-            justify-center
-            rounded-xl
-            bg-[hsl(222,47%,11%)]
-            text-[16px]
-            font-bold
-            text-[hsl(45,100%,54%)]
+            text-[22px]
+            font-[700]
+            tracking-[-0.04em]
+            text-[#111]
           "
         >
-          DP
+          {paper.title}
+        </h2>
+
+        <div className="mt-3 flex items-center justify-between text-[13px] text-[#777]">
+
+          <span>
+            Questions:{' '}
+            {paper.totalQuestions}
+          </span>
+
+          <span>
+            Marks:{' '}
+            {paper.totalMarks}
+          </span>
         </div>
-
-        <div>
-
-          <h2
-            className="
-              text-[17px]
-              font-bold
-              text-[hsl(222,47%,11%)]
-            "
-          >
-            Delhi Public School,
-            Sector-4, Bokaro
-          </h2>
-
-          <p
-            className="
-              mt-0.5
-              text-[12.5px]
-              text-[hsl(215,16%,47%)]
-            "
-          >
-            {paper.title}
-          </p>
-        </div>
-      </div>
-
-      {/* Meta */}
-      <div
-        className="
-          mb-4
-          grid
-          grid-cols-3
-          gap-3
-          text-[12.5px]
-          text-[hsl(215,16%,47%)]
-        "
-      >
-
-        <span>
-          <strong className="text-[hsl(222,47%,11%)]">
-            Time:
-          </strong>{' '}
-          {Math.max(
-            30,
-            paper.totalQuestions * 3
-          )}{' '}
-          minutes
-        </span>
-
-        <span className="text-center">
-          <strong className="text-[hsl(222,47%,11%)]">
-            Total Marks:
-          </strong>{' '}
-          {paper.totalMarks}
-        </span>
-
-        <span className="text-right">
-          <strong className="text-[hsl(222,47%,11%)]">
-            Questions:
-          </strong>{' '}
-          {paper.totalQuestions}
-        </span>
       </div>
 
       {paper.sections.map((section, si) => (
@@ -339,11 +262,11 @@ function PaperView({
   )
 }
 
-export default function AssessmentPage() {
+export default function AssignmentPage() {
   const params = useParams()
 
   const assignmentId =
-    params.id as string
+    params?.id as string
 
   const {
     currentAssignment,
@@ -355,7 +278,6 @@ export default function AssessmentPage() {
     setPaperLoading,
     setGenerationQueued,
     setGenerationStarted,
-    setGenerationComplete,
     setGenerationFailed,
     resetGeneration,
   } = useAssessmentStore()
@@ -369,61 +291,95 @@ export default function AssessmentPage() {
     if (
       !assignmentId ||
       fetchedRef.current === assignmentId
-    )
+    ) {
       return
+    }
 
     fetchedRef.current = assignmentId
 
     setCurrentAssignment(null)
     setCurrentPaper(null)
+
     resetGeneration()
 
-    Promise.all([
-      fetchAssignment(
-        assignmentId
-      ).then((r) => {
-        setCurrentAssignment(r.assignment)
-
-        if (r.assignment.jobId) {
-          if (
-            r.assignment.status ===
-            'queued'
-          )
-            setGenerationQueued(
-              r.assignment.jobId
-            )
-          else if (
-            r.assignment.status ===
-            'processing'
-          )
-            setGenerationStarted(
-              r.assignment.jobId
-            )
-          else if (
-            r.assignment.status ===
-            'failed'
-          )
-            setGenerationFailed(
-              r.assignment.errorMessage ||
-                'Generation failed'
-            )
-        }
-      }),
-
-      (() => {
+    const loadData = async () => {
+      try {
         setPaperLoading(true)
 
-        return fetchAssessmentByAssignment(
-          assignmentId
+        const assignmentRes =
+          await fetchAssignment(
+            assignmentId
+          )
+
+        if (
+          assignmentRes?.assignment
+        ) {
+          setCurrentAssignment(
+            assignmentRes.assignment
+          )
+
+          if (
+            assignmentRes.assignment
+              ?.jobId
+          ) {
+            if (
+              assignmentRes.assignment
+                .status === 'queued'
+            ) {
+              setGenerationQueued(
+                assignmentRes.assignment
+                  .jobId
+              )
+            } else if (
+              assignmentRes.assignment
+                .status ===
+              'processing'
+            ) {
+              setGenerationStarted(
+                assignmentRes.assignment
+                  .jobId
+              )
+            } else if (
+              assignmentRes.assignment
+                .status === 'failed'
+            ) {
+              setGenerationFailed(
+                assignmentRes.assignment
+                  .errorMessage ||
+                  'Generation failed'
+              )
+            }
+          }
+        }
+
+        try {
+          const paperRes =
+            await fetchAssessmentByAssignment(
+              assignmentId
+            )
+
+          if (paperRes?.paper) {
+            setCurrentPaper(
+              paperRes.paper
+            )
+          }
+        } catch (err) {
+          console.error(
+            'Paper fetch failed:',
+            err
+          )
+        }
+      } catch (err) {
+        console.error(
+          'Assignment fetch failed:',
+          err
         )
-          .then((r) =>
-            setCurrentPaper(r.paper)
-          )
-          .finally(() =>
-            setPaperLoading(false)
-          )
-      })(),
-    ])
+      } finally {
+        setPaperLoading(false)
+      }
+    }
+
+    loadData()
   }, [
     assignmentId,
     setCurrentAssignment,
@@ -443,7 +399,11 @@ export default function AssessmentPage() {
             assignmentId
           )
 
-        setGenerationQueued(res.jobId)
+        if (res?.jobId) {
+          setGenerationQueued(
+            res.jobId
+          )
+        }
       } catch (err) {
         console.error(err)
       }
@@ -466,13 +426,12 @@ export default function AssessmentPage() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
 
-        <div className="flex min-w-0 items-center gap-3">
+        <div className="flex items-center gap-3">
 
           <Link
             href="/assignments"
             className="
               flex
-              flex-shrink-0
               items-center
               gap-1.5
               rounded-xl
@@ -483,36 +442,32 @@ export default function AssessmentPage() {
               py-2
               text-[13px]
               font-medium
-              text-[hsl(215,16%,47%)]
+              text-[#666]
             "
           >
             <ArrowLeft size={14} />
-
             Assignments
           </Link>
 
-          <span className="text-[hsl(215,16%,60%)]">
-            /
-          </span>
-
           <h1
             className="
-              truncate
-              text-[15px]
-              font-semibold
-              text-[hsl(222,47%,11%)]
+              text-[16px]
+              font-[700]
+              text-[#111]
             "
           >
             {currentAssignment?.title ||
-              'Assessment'}
+              'Assignment'}
           </h1>
         </div>
 
         {currentPaper && (
-          <div className="flex flex-shrink-0 items-center gap-2">
+          <div className="flex items-center gap-2">
 
             <button
-              onClick={handleRegenerate}
+              onClick={
+                handleRegenerate
+              }
               className="
                 inline-flex
                 items-center
@@ -524,11 +479,10 @@ export default function AssessmentPage() {
                 py-2
                 text-[12.5px]
                 font-medium
-                text-[hsl(215,16%,40%)]
+                text-[#555]
               "
             >
               <RotateCcw size={13} />
-
               Regenerate
             </button>
 
@@ -539,7 +493,7 @@ export default function AssessmentPage() {
                 items-center
                 gap-1.5
                 rounded-xl
-                bg-[hsl(222,47%,11%)]
+                bg-[#111]
                 px-3.5
                 py-2
                 text-[12.5px]
@@ -548,7 +502,6 @@ export default function AssessmentPage() {
               "
             >
               <Download size={13} />
-
               Download PDF
             </button>
           </div>
@@ -557,8 +510,12 @@ export default function AssessmentPage() {
 
       <GenerationStatus
         status={generation.status}
-        progress={generation.progress}
-        message={generation.message}
+        progress={
+          generation.progress
+        }
+        message={
+          generation.message
+        }
         error={generation.error}
       />
 
@@ -570,14 +527,29 @@ export default function AssessmentPage() {
             border-[#E5E5E2]
             bg-white
             p-6
-            shadow-[0_1px_3px_rgba(0,0,0,0.05)]
           "
         >
           Loading...
         </div>
       ) : currentPaper ? (
-        <PaperView paper={currentPaper} />
-      ) : null}
+        <PaperView
+          paper={currentPaper}
+        />
+      ) : (
+        <div
+          className="
+            rounded-[14px]
+            border
+            border-[#E5E5E2]
+            bg-white
+            p-10
+            text-center
+            text-[#777]
+          "
+        >
+          No generated paper found.
+        </div>
+      )}
     </div>
   )
 }

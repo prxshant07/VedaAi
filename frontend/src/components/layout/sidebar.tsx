@@ -108,7 +108,6 @@ export function Sidebar() {
                 font-[700]
                 tracking-[-0.06em]
                 text-[#1F1F1F]
-                font-[family-name:var(--font-bricolage)]
               "
             >
               VedaAI

@@ -207,7 +207,6 @@ export default function CreateAssignmentPage() {
                 font-[700]
                 tracking-[-0.04em]
                 text-[#1F1F1F]
-                font-[family-name:var(--font-bricolage)]
               "
             >
               Create Assignment

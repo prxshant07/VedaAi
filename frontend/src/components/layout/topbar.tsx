@@ -52,7 +52,6 @@ export function Topbar({
                 leading-none
                 tracking-[-0.03em]
                 text-[#1F1F1F]
-                font-[family-name:var(--font-bricolage)]
               "
             >
               {pageTitle}

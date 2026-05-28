@@ -95,7 +95,6 @@ export function EmptyState({
             leading-[140%]
             tracking-[-0.04em]
             text-[#303030]
-            font-[family-name:var(--font-bricolage)]
           "
         >
           {title}
@@ -113,7 +112,6 @@ export function EmptyState({
               leading-[140%]
               tracking-[-0.04em]
               text-[#5E5E5ECC]
-              font-[family-name:var(--font-bricolage)]
             "
           >
             {description}

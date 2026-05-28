@@ -13,7 +13,10 @@ import {
 
 import { useAssessmentStore } from '@/store/assessmentStore'
 
-import { fetchAssignments } from '@/lib/api'
+import {
+  fetchAssignments,
+  deleteAssignment,
+} from '@/lib/api'
 
 import { AssignmentCardV2 } from '@/components/dashboard/assignment-card-v2'
 
@@ -48,6 +51,25 @@ export default function DashboardPage() {
     setAssignmentsLoading,
     setAssignmentsError,
   ])
+
+  const handleDelete = async (
+    id: string
+  ) => {
+    try {
+      await deleteAssignment(id)
+
+      setAssignments(
+        assignments.filter(
+          (a) => a._id !== id
+        )
+      )
+    } catch (err) {
+      console.error(
+        'Delete failed:',
+        err
+      )
+    }
+  }
 
   const stats = {
     total: assignments.length,
@@ -284,6 +306,7 @@ export default function DashboardPage() {
                     questions={a.totalQuestions || 0}
                     createdAt={a.createdAt}
                     dueDate={a.dueDate}
+                    onDelete={handleDelete}
                     status={
                       a.status === 'completed'
                         ? 'completed'

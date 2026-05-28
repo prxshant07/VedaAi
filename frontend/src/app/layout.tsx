@@ -2,6 +2,13 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import { AppShell } from '@/components/layout/app-shell'
+import { Bricolage_Grotesque } from 'next/font/google';
+
+const bricolage = Bricolage_Grotesque({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-bricolage',
+});
 
 export const metadata: Metadata = {
   title: 'VedaAI – AI Assessment Creator',
@@ -15,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="antialiased bg-[hsl(48,20%,97%)]">
+      <body className={`${bricolage.variable} font-sans antialiased bg-[hsl(48,20%,97%)]`}>
         {/*
           AppShell is a 'use client' component that renders:
           - Desktop: fixed 220px sidebar + topbar + scrollable main

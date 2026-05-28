@@ -31,62 +31,12 @@ export function EmptyState({
       className="
         relative
         flex
-        h-[780px]
-        w-full
-        items-center
+        h-[690px]
+        items-start
         justify-center
-        overflow-hidden
-        rounded-[32px]
+        pt-[42px]
       "
-      style={{
-        background:
-          'linear-gradient(180deg, #EEEEEE 0%, #DADADA 100%)',
-      }}
     >
-
-      {/* Atmospheric top glow */}
-      <div
-        className="
-          pointer-events-none
-          absolute
-          inset-0
-          opacity-40
-        "
-        style={{
-          background:
-            'radial-gradient(circle at top, rgba(255,255,255,0.75) 0%, transparent 58%)',
-        }}
-      />
-
-      {/* Left atmospheric shadow */}
-      <div
-        className="
-          pointer-events-none
-          absolute
-          inset-y-0
-          left-0
-          w-[220px]
-        "
-        style={{
-          background:
-            'linear-gradient(90deg, rgba(0,0,0,0.03) 0%, transparent 100%)',
-        }}
-      />
-
-      {/* Right atmospheric shadow */}
-      <div
-        className="
-          pointer-events-none
-          absolute
-          inset-y-0
-          right-0
-          w-[220px]
-        "
-        style={{
-          background:
-            'linear-gradient(270deg, rgba(0,0,0,0.03) 0%, transparent 100%)',
-        }}
-      />
 
       {/* Content */}
       <div
@@ -95,25 +45,22 @@ export function EmptyState({
           z-10
           mx-auto
           flex
-          w-full
           max-w-[640px]
           flex-col
           items-center
-          px-8
-          py-20
           text-center
         "
       >
 
         {/* Illustration / Icon */}
-        <div className="mb-10 flex items-center justify-center">
+        <div className="mb-8 flex items-center justify-center">
 
           {illustration ? (
             <Image
               src={illustration}
               alt={title}
-              width={320}
-              height={320}
+              width={300}
+              height={300}
               priority
               className="object-contain"
             />
@@ -192,7 +139,6 @@ export function EmptyState({
               transition-all
               duration-200
               hover:opacity-90
-              hover:shadow-[0_10px_24px_rgba(11,23,54,0.18)]
             "
           >
             {actionLabel}
@@ -223,7 +169,6 @@ export function EmptyState({
               transition-all
               duration-200
               hover:opacity-90
-              hover:shadow-[0_10px_24px_rgba(11,23,54,0.18)]
             "
           >
             {actionLabel}

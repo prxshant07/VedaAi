@@ -85,8 +85,8 @@ export function Sidebar() {
               relative
               top-[4px]
               flex
-              h-[100px]
-              w-[100px]
+              h-[80px]
+              w-[80px]
               items-center
               justify-center
               flex-shrink-0

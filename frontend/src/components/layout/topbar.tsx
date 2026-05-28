@@ -1,6 +1,12 @@
 'use client'
 
-import { Bell, Search, Settings, ChevronDown } from 'lucide-react'
+import {
+  Bell,
+  Search,
+  Settings,
+  ChevronDown,
+} from 'lucide-react'
+
 import { useState } from 'react'
 
 interface TopbarProps {
@@ -8,59 +14,221 @@ interface TopbarProps {
   pageSubtitle?: string
 }
 
-export function Topbar({ pageTitle, pageSubtitle }: TopbarProps) {
+export function Topbar({
+  pageTitle,
+  pageSubtitle,
+}: TopbarProps) {
   const [search, setSearch] = useState('')
 
   return (
-    <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-border bg-white/90 backdrop-blur-xl px-6">
+    <header className="w-full">
 
-      {/* Left */}
-      <div>
-        {pageTitle && (
-          <h1 className="text-[15px] font-semibold text-[hsl(222,47%,11%)] tracking-tight">
-            {pageTitle}
-          </h1>
-        )}
-        {pageSubtitle && (
-          <p className="text-[12px] text-[hsl(215,16%,47%)]">{pageSubtitle}</p>
-        )}
-      </div>
+      <div
+        className="
+          mx-auto
+          flex
+          h-14
+          max-w-[1100px]
+          items-center
+          justify-between
+          rounded-2xl
+          border
+          border-zinc-200
+          bg-white
+          pl-6
+          pr-3
+          shadow-[0_1px_2px_rgba(0,0,0,0.03)]
+        "
+      >
 
-      {/* Right */}
-      <div className="flex items-center gap-2">
+        {/* Left */}
+        <div className="min-w-0">
+          {pageTitle && (
+            <h1
+              className="
+                truncate
+                text-[15px]
+                font-semibold
+                tracking-[-0.02em]
+                text-zinc-900
+              "
+            >
+              {pageTitle}
+            </h1>
+          )}
 
-        {/* Search */}
-        <div className="relative hidden md:flex">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[hsl(215,16%,55%)]" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search assignments…"
-            className="h-8 w-52 rounded-lg border border-border bg-[hsl(48,20%,97%)] pl-8 pr-3 text-[13px] outline-none transition-all focus:border-[hsl(222,47%,11%)]/30 focus:bg-white focus:ring-2 focus:ring-[hsl(222,47%,11%)]/8"
-          />
+          {pageSubtitle && (
+            <p
+              className="
+                mt-0.5
+                truncate
+                text-[12px]
+                text-zinc-500
+              "
+            >
+              {pageSubtitle}
+            </p>
+          )}
         </div>
 
-        {/* Notifications */}
-        <button className="relative flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-white transition-colors hover:bg-[hsl(48,20%,96%)]">
-          <Bell size={15} className="text-[hsl(222,47%,11%)]" />
-          <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[hsl(14,100%,50%)] ring-1 ring-white" />
-        </button>
+        {/* Right */}
+        <div className="flex items-center gap-2">
 
-        {/* Settings */}
-        <button className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-white transition-colors hover:bg-[hsl(48,20%,96%)]">
-          <Settings size={15} className="text-[hsl(215,16%,47%)]" />
-        </button>
+          {/* Search */}
+          <div className="relative hidden md:flex">
 
-        {/* Profile */}
-        <button className="flex items-center gap-2 rounded-lg border border-border bg-white px-2.5 py-1.5 transition-colors hover:bg-[hsl(48,20%,96%)]">
-          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-violet-700 text-[10px] font-bold text-white">
-            JD
+            <Search
+              size={15}
+              className="
+                absolute
+                left-3
+                top-1/2
+                -translate-y-1/2
+                text-zinc-400
+              "
+            />
+
+            <input
+              type="text"
+              value={search}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
+              placeholder="Search assignments..."
+              className="
+                h-10
+                w-60
+                rounded-xl
+                border
+                border-zinc-200
+                bg-zinc-50
+                pl-9
+                pr-4
+                text-[13px]
+                text-zinc-700
+                outline-none
+                transition-all
+                placeholder:text-zinc-400
+                focus:border-zinc-300
+                focus:bg-white
+                focus:ring-4
+                focus:ring-zinc-100
+              "
+            />
           </div>
-          <span className="hidden text-[13px] font-medium text-[hsl(222,47%,11%)] lg:block">John Doe</span>
-          <ChevronDown size={13} className="text-[hsl(215,16%,55%)]" />
-        </button>
 
+          {/* Notifications */}
+          <button
+            className="
+              relative
+              flex
+              h-10
+              w-10
+              items-center
+              justify-center
+              rounded-xl
+              border
+              border-zinc-200
+              bg-white
+              text-zinc-500
+              transition-all
+              hover:bg-zinc-100
+              hover:text-zinc-900
+            "
+          >
+            <Bell size={17} />
+
+            <span
+              className="
+                absolute
+                right-2
+                top-2
+                h-2
+                w-2
+                rounded-full
+                bg-[#FF5A36]
+                ring-2
+                ring-white
+              "
+            />
+          </button>
+
+          {/* Settings */}
+          <button
+            className="
+              flex
+              h-10
+              w-10
+              items-center
+              justify-center
+              rounded-xl
+              border
+              border-zinc-200
+              bg-white
+              text-zinc-500
+              transition-all
+              hover:bg-zinc-100
+              hover:text-zinc-900
+            "
+          >
+            <Settings size={17} />
+          </button>
+
+          {/* Profile */}
+          <button
+            className="
+              flex
+              h-10
+              items-center
+              gap-2
+              rounded-xl
+              border
+              border-zinc-200
+              bg-white
+              px-3
+              transition-all
+              hover:bg-zinc-100
+            "
+          >
+
+            {/* Avatar */}
+            <div
+              className="
+                flex
+                h-7
+                w-7
+                items-center
+                justify-center
+                rounded-full
+                bg-[#0B1736]
+                text-[11px]
+                font-semibold
+                text-[#FFD84D]
+              "
+            >
+              JD
+            </div>
+
+            {/* Name */}
+            <span
+              className="
+                hidden
+                text-[13px]
+                font-medium
+                text-zinc-900
+                lg:block
+              "
+            >
+              John Doe
+            </span>
+
+            <ChevronDown
+              size={14}
+              className="text-zinc-400"
+            />
+          </button>
+
+        </div>
       </div>
     </header>
   )

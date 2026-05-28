@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 import {
   Search,
@@ -24,8 +25,6 @@ import {
 } from '@/lib/utils'
 
 import { Assignment } from '@/types'
-
-import { EmptyState } from '@/components/ui/empty-state'
 
 const FIGMA_STATUS: Record<
   string,
@@ -399,14 +398,118 @@ export default function AssignmentsPage() {
   return (
     <div className="flex h-full flex-col">
 
+      {/* EMPTY STATE */}
       {filtered.length === 0 ? (
-        <EmptyState
-          illustration="/illustrations/Illustrations.png"
-          title="No assignments yet"
-          description="Create your first assignment to start collecting and grading student submissions. You can set up rubrics, define marking criteria, and let AI assist with grading."
-          actionLabel="Create Your First Assignment"
-          actionHref="/assignments/create"
-        />
+        <div
+          className="
+            flex
+            flex-1
+            items-center
+            justify-center
+            rounded-[32px]
+            pb-24
+          "
+          style={{
+            background:
+              'linear-gradient(180deg, #EEEEEE 0%, #DADADA 100%)',
+          }}
+        >
+
+          <div
+            className="
+              mx-auto
+              flex
+              max-w-[560px]
+              flex-col
+              items-center
+              rounded-[32px]
+              bg-white/55
+              px-12
+              py-14
+              text-center
+              backdrop-blur-xl
+            "
+          >
+
+            {/* Illustration */}
+            <div
+              className="
+                mb-10
+                flex
+                items-center
+                justify-center
+              "
+            >
+              <Image
+                src="/illustrations/Illustrations.png"
+                alt="No assignments illustration"
+                width={300}
+                height={300}
+                priority
+                className="object-contain"
+              />
+            </div>
+
+            {/* Heading */}
+            <h3
+              className="
+                mb-4
+                w-[181px]
+                text-center
+                font-[700]
+                text-[20px]
+                leading-[140%]
+                tracking-[-0.04em]
+                text-[#303030]
+                font-[family-name:var(--font-bricolage)]
+              "
+            >
+              No assignments yet
+            </h3>
+
+            {/* Description */}
+            <p
+              className="
+                mb-10
+                w-[486px]
+                text-center
+                font-[400]
+                text-[16px]
+                leading-[140%]
+                tracking-[-0.04em]
+                text-[#5E5E5ECC]
+                font-[family-name:var(--font-bricolage)]
+              "
+            >
+              Create your first assignment to start collecting and grading student submissions. You can set up rubrics, define marking criteria, and let AI assist with grading.
+            </p>
+
+            {/* CTA */}
+            <Link
+              href="/assignments/create"
+              className="
+                inline-flex
+                h-14
+                items-center
+                justify-center
+                gap-2
+                rounded-2xl
+                bg-[#0B1736]
+                px-7
+                text-[15px]
+                font-semibold
+                text-white
+                transition-all
+                duration-200
+                hover:opacity-90
+              "
+            >
+              <Plus size={17} />
+
+              Create Your First Assignment
+            </Link>
+          </div>
+        </div>
       ) : (
         <>
           {/* Toolbar */}

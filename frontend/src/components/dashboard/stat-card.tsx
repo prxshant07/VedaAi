@@ -10,27 +10,109 @@ interface StatCardProps {
   positive?: boolean
 }
 
-export function StatCard({ title, value, change, icon, positive = true }: StatCardProps) {
+export function StatCard({
+  title,
+  value,
+  change,
+  icon,
+  positive = true,
+}: StatCardProps) {
   return (
-    <div className="relative overflow-hidden rounded-[14px] border border-[#E5E5E2] bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-200 hover:-translate-y-[1px] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
-      <div className="absolute top-0 left-0 right-0 h-[3px] bg-[hsl(45,100%,54%)] rounded-t-[14px]" />
+    <div
+      className="
+        relative
+        overflow-hidden
+        rounded-[24px]
+        bg-[#F8F8F8]
+        px-[24px]
+        py-[22px]
+        transition-all
+        duration-200
+        hover:-translate-y-[1px]
+      "
+    >
+
+      {/* Top */}
       <div className="flex items-start justify-between gap-4">
+
+        {/* Left */}
         <div>
-          <p className="text-[12.5px] font-medium text-[hsl(215,16%,47%)]">{title}</p>
-          <h3 className="mt-3 text-3xl font-bold tracking-tight text-[hsl(222,47%,11%)]">{value}</h3>
+
+          {/* Title */}
+          <p
+            className="
+              text-[14px]
+              font-[600]
+              tracking-[-0.03em]
+              text-[#7A7A7A]
+            "
+          >
+            {title}
+          </p>
+
+          {/* Value */}
+          <h3
+            className="
+              mt-[10px]
+              text-[36px]
+              font-[700]
+              leading-none
+              tracking-[-0.06em]
+              text-[#1A1A1A]
+            "
+          >
+            {value}
+          </h3>
         </div>
+
+        {/* Icon */}
         {icon && (
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(222,47%,11%)] text-[hsl(45,100%,54%)]">
+          <div
+            className="
+              flex
+              h-[48px]
+              w-[48px]
+              items-center
+              justify-center
+              rounded-[16px]
+              bg-[#101010]
+              text-[#FFD84D]
+            "
+          >
             {icon}
           </div>
         )}
       </div>
+
+      {/* Bottom */}
       {change && (
-        <div className="mt-4 flex items-center gap-2">
-          <span className={`rounded-full px-2.5 py-0.5 text-[11.5px] font-semibold ${positive ? 'bg-[#EBF7F0] text-[#1A7A47]' : 'bg-[#FEF0ED] text-[#B83F20]'}`}>
+        <div className="mt-[20px] flex items-center gap-2">
+
+          <span
+            className={`
+              rounded-full
+              px-[10px]
+              py-[4px]
+              text-[12px]
+              font-[600]
+              ${
+                positive
+                  ? 'bg-[#EAF8EF] text-[#1A7A47]'
+                  : 'bg-[#FEF0ED] text-[#C54828]'
+              }
+            `}
+          >
             {change}
           </span>
-          <span className="text-[11.5px] text-[hsl(215,16%,55%)]">vs last month</span>
+
+          <span
+            className="
+              text-[12px]
+              text-[#8A8A8A]
+            "
+          >
+            vs last month
+          </span>
         </div>
       )}
     </div>

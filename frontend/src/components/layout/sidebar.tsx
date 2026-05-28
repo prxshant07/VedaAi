@@ -85,8 +85,8 @@ export function Sidebar() {
               relative
               top-[4px]
               flex
-              h-[80px]
-              w-[80px]
+              h-[20px]
+              w-[28px]
               items-center
               justify-center
               flex-shrink-0
@@ -97,8 +97,8 @@ export function Sidebar() {
               src="/illustrations/logo2.png"
               alt="VedaAI"
               className="
-                h-[80px]
-                w-[80px]
+                h-full
+                w-full
                 object-contain
               "
             />

@@ -97,9 +97,10 @@ export function Sidebar() {
               src="/illustrations/logo2.png"
               alt="VedaAI"
               className="
-                h-full
-                w-full
+                h-[30px]
+                w-[30px]
                 object-contain
+                scale-[1.35]
               "
             />
           </div>

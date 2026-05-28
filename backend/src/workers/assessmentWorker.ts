@@ -10,8 +10,6 @@ import { Assignment } from '../models/Assignment';
 import { GeneratedPaper } from '../models/GeneratedPaper';
 import { emitToAssignment } from '../websocket/socket';
 
-import './workers/assessmentWorker';
-
 dotenv.config();
 
 const connection = {

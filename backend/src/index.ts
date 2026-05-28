@@ -16,6 +16,8 @@ import { requestLogger } from './middleware/requestLogger';
 import { apiLimiter, generationLimiter, uploadLimiter } from './middleware/rateLimiter';
 import { sanitizeInputs } from './middleware/sanitize';
 
+import './workers/assessmentWorker';
+
 dotenv.config();
 
 const app = express();

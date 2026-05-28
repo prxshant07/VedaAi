@@ -255,16 +255,18 @@ export default function CreateAssignmentPage() {
         <div
           className="
             mx-auto
-            max-w-[680px]
-            rounded-[24px]
+            flex
+            w-[810px]
+            flex-col
+            gap-[32px]
+            rounded-[32px]
             bg-[#F5F5F5]
-            px-6
-            py-5
+            p-[32px]
           "
         >
 
           {/* Section */}
-          <div className="mb-5">
+          <div>
 
             <h2
               className="
@@ -278,7 +280,6 @@ export default function CreateAssignmentPage() {
 
             <p
               className="
-                mt-1
                 text-[11px]
                 text-[#9A9A9A]
               "
@@ -308,7 +309,7 @@ export default function CreateAssignmentPage() {
 
             <UploadCloud
               size={26}
-              className="mb-3 text-[#3A3A3A]"
+              className="text-[#3A3A3A]"
             />
 
             <p
@@ -324,7 +325,6 @@ export default function CreateAssignmentPage() {
 
             <p
               className="
-                mt-1
                 text-[11px]
                 text-[#A0A0A0]
               "
@@ -334,7 +334,6 @@ export default function CreateAssignmentPage() {
 
             <label
               className="
-                mt-4
                 inline-flex
                 cursor-pointer
                 items-center
@@ -360,7 +359,7 @@ export default function CreateAssignmentPage() {
             </label>
 
             {uploading && (
-              <p className="mt-3 text-[12px] text-[#7A7A7A]">
+              <p className="text-[12px] text-[#7A7A7A]">
                 Uploading...
               </p>
             )}
@@ -368,7 +367,6 @@ export default function CreateAssignmentPage() {
 
           <p
             className="
-              mt-3
               text-center
               text-[11px]
               text-[#9A9A9A]
@@ -379,7 +377,7 @@ export default function CreateAssignmentPage() {
           </p>
 
           {/* Due Date */}
-          <div className="mt-5">
+          <div>
 
             <label
               className="
@@ -411,7 +409,7 @@ export default function CreateAssignmentPage() {
           </div>
 
           {/* Question Rows */}
-          <div className="mt-5">
+          <div>
 
             <div
               className="
@@ -567,7 +565,6 @@ export default function CreateAssignmentPage() {
           {/* Totals */}
           <div
             className="
-              mt-6
               text-right
               text-[12px]
               leading-6
@@ -586,7 +583,7 @@ export default function CreateAssignmentPage() {
           </div>
 
           {/* Additional Info */}
-          <div className="mt-6">
+          <div>
 
             <label
               className="
@@ -629,7 +626,7 @@ export default function CreateAssignmentPage() {
             mx-auto
             mt-5
             flex
-            max-w-[680px]
+            w-[810px]
             items-center
             justify-between
           "

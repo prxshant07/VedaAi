@@ -54,7 +54,10 @@ export default function AssignmentsPage() {
         )
       )
     } catch (err) {
-      console.error('Delete failed:', err)
+      console.error(
+        'Delete failed:',
+        err
+      )
     }
   }
 
@@ -164,24 +167,14 @@ export default function AssignmentsPage() {
                 key={assignment._id}
                 id={assignment._id}
                 title={assignment.title}
-                createdAt={
-                  assignment.createdAt
-                    ? new Date(
-                        assignment.createdAt
-                      ).toLocaleDateString(
-                        'en-GB'
-                      )
-                    : ''
-                }
-                dueDate={
-                  assignment.dueDate
-                    ? new Date(
-                        assignment.dueDate
-                      ).toLocaleDateString(
-                        'en-GB'
-                      )
-                    : ''
-                }
+
+                /* PASS RAW DATES */
+                createdAt={assignment.createdAt}
+                dueDate={assignment.dueDate}
+
+                /* DELETE HANDLER */
+                onDelete={handleDelete}
+
                 status={
                   assignment.status ===
                   'completed'

@@ -122,14 +122,9 @@ export function AppShell({
               className="
                 flex-1
                 overflow-y-auto
-                rounded-2xl
-                border
-                border-zinc-200
-                bg-white
-                shadow-[0_1px_2px_rgba(0,0,0,0.03)]
               "
             >
-              <div className="mx-auto h-full max-w-[1100px] px-8 py-8">
+              <div className="mx-auto h-full max-w-[1100px]">
                 <div className="fade-page h-full">
                   {children}
                 </div>

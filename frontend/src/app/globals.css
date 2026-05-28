@@ -186,3 +186,11 @@
   .print-paper { font-family: 'Times New Roman', serif; color: black; background: white; }
   body { background: white !important; }
 }
+
+.figma-surface {
+  background: linear-gradient(
+    180deg,
+    #EEEEEE 0%,
+    #DADADA 100%
+  );
+}

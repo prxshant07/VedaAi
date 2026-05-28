@@ -95,7 +95,13 @@ export function AppShell({
     getPageMeta(pathname)
 
   return (
-    <div className="min-h-screen bg-[#f8f8f7]">
+    <div 
+      className="min-h-screen"
+      style={{
+        background:
+          'linear-gradient(180deg, #EEEEEE 0%, #DADADA 100%)',
+      }}
+    >
 
       {/* Desktop */}
       <div className="hidden h-screen overflow-hidden lg:flex">

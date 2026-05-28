@@ -47,7 +47,7 @@ app.use(sanitizeInputs);
 app.use('/api', apiLimiter);
 
 // Routes
-app.use('/api/assignments', assignmentRoutes);
+app.use('/api/assignments', apiLimiter, assignmentRoutes);
 app.use('/api/assessments', assessmentRoutes);
 app.use('/api/upload', uploadLimiter, uploadRoutes);
 app.use('/api/pdf', pdfRoutes);

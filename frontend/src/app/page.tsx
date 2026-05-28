@@ -9,7 +9,6 @@ import {
   Loader2,
   FileText,
   Plus,
-  ArrowRight,
 } from 'lucide-react'
 
 import { useAssessmentStore } from '@/store/assessmentStore'
@@ -69,60 +68,129 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-[20px]">
 
-      {/* Page Header */}
-      <div className="flex items-start justify-between">
+      {/* Header */}
+      <section>
 
-        <div>
+        <div className="flex items-center gap-2">
+
+          <div
+            className="
+              h-[14px]
+              w-[14px]
+              rounded-full
+              bg-[#58D26B]
+            "
+          />
+
           <h1
             className="
-              text-[20px]
-              font-bold
-              tracking-tight
-              text-[hsl(222,47%,11%)]
+              text-[32px]
+              font-[700]
+              leading-none
+              tracking-[-0.06em]
+              text-[#1F1F1F]
             "
           >
             Assignments
           </h1>
-
-          <p
-            className="
-              mt-0.5
-              text-[13px]
-              text-[hsl(215,16%,47%)]
-            "
-          >
-            Create and manage assignments
-            for your classes
-          </p>
         </div>
 
-        <Link
-          href="/assignments/create"
+        <p
           className="
-            inline-flex
-            items-center
-            gap-2
-            rounded-xl
-            bg-[hsl(222,47%,11%)]
-            px-4
-            py-2.5
-            text-[13px]
-            font-semibold
-            text-white
-            transition-opacity
-            hover:opacity-90
+            mt-[8px]
+            text-[15px]
+            font-[500]
+            text-[#8A8A8A]
           "
         >
-          <Plus
-            size={15}
-            strokeWidth={2.5}
-          />
+          Manage and create assignments for your classes.
+        </p>
+      </section>
 
-          Create Assignment
-        </Link>
-      </div>
+      {/* Toolbar */}
+      <section
+        className="
+          flex
+          items-center
+          justify-between
+          rounded-[20px]
+          bg-[#F8F8F8]
+          px-[18px]
+          py-[10px]
+        "
+      >
+
+        {/* Filter */}
+        <button
+          className="
+            flex
+            items-center
+            gap-2
+            text-[14px]
+            font-[600]
+            text-[#8A8A8A]
+          "
+        >
+
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M3 5h18l-7 8v5l-4 2v-7L3 5z" />
+          </svg>
+
+          Filter By
+        </button>
+
+        {/* Search */}
+        <div className="relative w-[355px]">
+
+          <svg
+            className="
+              absolute
+              left-[16px]
+              top-1/2
+              -translate-y-1/2
+              text-[#A0A0A0]
+            "
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+
+          <input
+            type="text"
+            placeholder="Search Assignment"
+            className="
+              h-[44px]
+              w-full
+              rounded-full
+              border
+              border-[#DADADA]
+              bg-white
+              pl-[44px]
+              pr-[18px]
+              text-[14px]
+              font-[500]
+              text-[#1F1F1F]
+              outline-none
+              placeholder:text-[#A0A0A0]
+            "
+          />
+        </div>
+      </section>
 
       {/* Stats */}
       <section
@@ -158,62 +226,17 @@ export default function DashboardPage() {
         />
       </section>
 
-      {/* Recent Assignments */}
+      {/* Assignments */}
       <section>
-
-        <div className="mb-4 flex items-center justify-between">
-
-          <div>
-            <h2
-              className="
-                text-[16px]
-                font-bold
-                text-[hsl(222,47%,11%)]
-              "
-            >
-              Recent Assignments
-            </h2>
-
-            <p
-              className="
-                mt-0.5
-                text-[12.5px]
-                text-[hsl(215,16%,47%)]
-              "
-            >
-              Recently generated
-              AI-powered assessments
-            </p>
-          </div>
-
-          <Link
-            href="/assignments"
-            className="
-              inline-flex
-              items-center
-              gap-1.5
-              text-[12.5px]
-              font-semibold
-              text-[hsl(222,47%,11%)]
-              transition-opacity
-              hover:opacity-70
-            "
-          >
-            View All
-
-            <ArrowRight size={13} />
-          </Link>
-        </div>
 
         {/* Loading */}
         {assignmentsLoading ? (
+
           <div
             className="
               grid
-              grid-cols-1
-              gap-4
-              md:grid-cols-2
-              xl:grid-cols-3
+              grid-cols-2
+              gap-[10px]
             "
           >
             {[...Array(6)].map((_, i) => (
@@ -221,7 +244,7 @@ export default function DashboardPage() {
                 key={i}
                 className="
                   skeleton-shimmer
-                  h-[220px]
+                  h-[132px]
                   rounded-[24px]
                   bg-[#E4E4E4]
                 "
@@ -229,9 +252,9 @@ export default function DashboardPage() {
             ))}
           </div>
 
-        /* Empty State */
         ) : assignments.length === 0 ? (
 
+          /* Empty */
           <EmptyState
             illustration="/illustrations/Illustrations.png"
             title="No assignments yet"
@@ -240,27 +263,61 @@ export default function DashboardPage() {
             actionHref="/assignments/create"
           />
 
-        /* Populated */
         ) : (
 
-          <div
-            className="
-              grid
-              grid-cols-1
-              gap-4
-              md:grid-cols-2
-              xl:grid-cols-3
-            "
-          >
-            {assignments
-              .slice(0, 6)
-              .map((a) => (
-                <AssignmentCard
-                  key={a._id}
-                  assignment={a}
-                />
-              ))}
-          </div>
+          <>
+            {/* Cards */}
+            <section
+              className="
+                grid
+                grid-cols-2
+                gap-[10px]
+              "
+            >
+              {assignments
+                .slice(0, 6)
+                .map((a) => (
+                  <AssignmentCard
+                    key={a._id}
+                    assignment={a}
+                  />
+                ))}
+            </section>
+
+            {/* Floating Create Button */}
+            <div
+              className="
+                fixed
+                bottom-[24px]
+                left-1/2
+                z-50
+                -translate-x-1/2
+              "
+            >
+
+              <Link
+                href="/assignments/create"
+                className="
+                  flex
+                  h-[56px]
+                  items-center
+                  gap-2
+                  rounded-full
+                  bg-[#101010]
+                  px-[28px]
+                  text-[16px]
+                  font-[600]
+                  text-white
+                  shadow-[0_14px_40px_rgba(0,0,0,0.24)]
+                "
+              >
+
+                <Plus size={18} />
+
+                Create Assignment
+              </Link>
+            </div>
+          </>
         )}
       </section>
     </div>

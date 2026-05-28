@@ -115,7 +115,7 @@ export function AssignmentCardV2({
               text-[#7A7A7A]
             "
           >
-            {createdAt}
+            {new Date(createdAt).toLocaleDateString('en-GB')}
           </span>
         </div>
 
@@ -141,7 +141,7 @@ export function AssignmentCardV2({
               text-[#7A7A7A]
             "
           >
-            {dueDate}
+            {new Date(dueDate).toLocaleDateString('en-GB')}
           </span>
         </div>
       </div>

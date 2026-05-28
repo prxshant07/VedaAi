@@ -83,10 +83,10 @@ export function Sidebar() {
           <div
             className="
               relative
-              top-[2px]
+              top-[4px]
               flex
-              h-[50px]
-              w-[50px]
+              h-[100px]
+              w-[100px]
               items-center
               justify-center
               flex-shrink-0
@@ -97,8 +97,8 @@ export function Sidebar() {
               src="/illustrations/logo2.png"
               alt="VedaAI"
               className="
-                h-[40px]
-                w-[40px]
+                h-[80px]
+                w-[80px]
                 object-contain
               "
             />
@@ -107,11 +107,13 @@ export function Sidebar() {
           {/* Text */}
           <h1
             className="
-              ml-[10px]
-              text-[18px]
+              ml-[12px]
+              h-[20px]
+              w-[88px]
+              text-[28px]
               font-[700]
-              leading-none
-              tracking-[-0.04em]
+              leading-[20px]
+              tracking-[-0.06em]
               text-[#1F1F1F]
             "
           >

@@ -1,107 +1,208 @@
 'use client'
 
 import Link from 'next/link'
-import { MoreHorizontal, FileText, Clock3, ArrowRight } from 'lucide-react'
+
+import {
+  MoreVertical,
+} from 'lucide-react'
 
 interface AssignmentCardV2Props {
   id?: string
   title: string
-  subject: string
-  questions: number
-  duration: string
+  subject?: string
+  questions?: number
+  duration?: string
   difficulty?: string
   status?: 'active' | 'draft' | 'completed'
   progress?: number
   createdAt?: string
-}
-
-const statusStyles = {
-  active:    { bg: 'bg-[#EBF7F0]', text: 'text-[#1A7A47]', label: '● Active' },
-  draft:     { bg: 'bg-[#FEF9E7]', text: 'text-[#A07800]', label: '○ Draft' },
-  completed: { bg: 'bg-[#EBF7F0]', text: 'text-[#1A7A47]', label: '✓ Completed' },
+  dueDate?: string
 }
 
 export function AssignmentCardV2({
   id,
   title,
-  subject,
-  questions,
-  duration,
-  difficulty = 'Medium',
-  status = 'active',
-  progress = 72,
-  createdAt,
+  createdAt = '20-06-2025',
+  dueDate = '21-06-2025',
 }: AssignmentCardV2Props) {
-  const st = statusStyles[status]
-
   return (
-    <div className="group relative bg-white border border-[#E5E5E2] rounded-[14px] p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:-translate-y-[1px]">
+    <div
+      className="
+        group
+        relative
+        h-[132px]
+        rounded-[24px]
+        bg-[#F8F8F8]
+        px-[20px]
+        py-[20px]
+        transition-all
+        duration-200
+        hover:bg-white
+      "
+    >
 
       {/* Top */}
-      <div className="flex items-start justify-between gap-2 mb-4">
-        <span className={`text-[11.5px] font-semibold px-2.5 py-1 rounded-full ${st.bg} ${st.text}`}>
-          {st.label}
-        </span>
-        <button className="flex h-7 w-7 items-center justify-center rounded-lg text-[hsl(215,16%,55%)] hover:bg-[hsl(48,20%,96%)] transition-colors">
-          <MoreHorizontal size={15} />
+      <div className="flex items-start justify-between">
+
+        {/* Title */}
+        <h3
+          className="
+            max-w-[260px]
+            text-[20px]
+            font-[700]
+            leading-[110%]
+            tracking-[-0.06em]
+            text-[#1F1F1F]
+          "
+        >
+          {title}
+        </h3>
+
+        {/* Menu */}
+        <button
+          className="
+            flex
+            h-[28px]
+            w-[28px]
+            items-center
+            justify-center
+            rounded-full
+            transition-colors
+            hover:bg-[#EFEFEF]
+          "
+        >
+
+          <MoreVertical
+            size={18}
+            strokeWidth={2.2}
+            className="text-[#9A9A9A]"
+          />
         </button>
       </div>
 
-      {/* Title */}
-      <h3 className="text-[14.5px] font-semibold text-[hsl(222,47%,11%)] leading-snug line-clamp-2 mb-1">{title}</h3>
-      <p className="text-[12.5px] text-[hsl(215,16%,47%)] mb-4">{subject}</p>
+      {/* Bottom */}
+      <div
+        className="
+          absolute
+          bottom-[18px]
+          left-[20px]
+          right-[20px]
+          flex
+          items-center
+          justify-between
+        "
+      >
 
-      {/* Meta grid */}
-      <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="rounded-xl bg-[hsl(48,20%,97%)] border border-[hsl(220,13%,92%)] p-2.5">
-          <div className="flex items-center gap-1.5 text-[hsl(215,16%,55%)] mb-1.5">
-            <FileText size={13} />
-            <span className="text-[11.5px] font-medium">Questions</span>
-          </div>
-          <p className="text-[15px] font-bold text-[hsl(222,47%,11%)]">{questions}</p>
+        {/* Assigned */}
+        <div className="flex items-center gap-[4px]">
+
+          <span
+            className="
+              text-[14px]
+              font-[700]
+              tracking-[-0.03em]
+              text-[#1F1F1F]
+            "
+          >
+            Assigned on :
+          </span>
+
+          <span
+            className="
+              text-[14px]
+              font-[500]
+              tracking-[-0.03em]
+              text-[#7A7A7A]
+            "
+          >
+            {createdAt}
+          </span>
         </div>
-        <div className="rounded-xl bg-[hsl(48,20%,97%)] border border-[hsl(220,13%,92%)] p-2.5">
-          <div className="flex items-center gap-1.5 text-[hsl(215,16%,55%)] mb-1.5">
-            <Clock3 size={13} />
-            <span className="text-[11.5px] font-medium">Duration</span>
-          </div>
-          <p className="text-[15px] font-bold text-[hsl(222,47%,11%)]">{duration}</p>
+
+        {/* Due */}
+        <div className="flex items-center gap-[4px]">
+
+          <span
+            className="
+              text-[14px]
+              font-[700]
+              tracking-[-0.03em]
+              text-[#1F1F1F]
+            "
+          >
+            Due :
+          </span>
+
+          <span
+            className="
+              text-[14px]
+              font-[500]
+              tracking-[-0.03em]
+              text-[#7A7A7A]
+            "
+          >
+            {dueDate}
+          </span>
         </div>
       </div>
 
-      {/* Difficulty */}
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-[12.5px] text-[hsl(215,16%,47%)]">Difficulty</span>
-        <span className="text-[11.5px] font-semibold px-2.5 py-0.5 rounded-full bg-[hsl(48,20%,96%)] text-[hsl(222,47%,30%)] border border-[hsl(220,13%,90%)]">
-          {difficulty}
-        </span>
-      </div>
+      {/* Hover Menu */}
+      <div
+        className="
+          absolute
+          right-[48px]
+          top-[44px]
+          hidden
+          w-[140px]
+          rounded-[16px]
+          bg-white
+          p-[8px]
+          shadow-[0_18px_40px_rgba(0,0,0,0.12)]
+          group-hover:block
+        "
+      >
 
-      {/* Progress */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[12px] text-[hsl(215,16%,47%)]">Completion</span>
-          <span className="text-[12px] font-semibold text-[hsl(222,47%,11%)]">{progress}%</span>
-        </div>
-        <div className="h-1.5 overflow-hidden rounded-full bg-[hsl(48,20%,94%)]">
-          <div
-            className="h-full rounded-full bg-[hsl(222,47%,11%)] transition-all duration-500"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="flex items-center justify-between pt-3 border-t border-[#F0EFE8]">
-        {createdAt && <p className="text-[11.5px] text-[hsl(215,16%,55%)]">Created {createdAt}</p>}
         <Link
-          href={id ? `/assignments/${id}` : '#'}
-          className="ml-auto flex items-center gap-1.5 rounded-xl bg-[hsl(222,47%,11%)] px-3.5 py-2 text-[12.5px] font-semibold text-white hover:opacity-90 transition-opacity"
+          href={
+            id
+              ? `/assignments/${id}`
+              : '#'
+          }
+          className="
+            flex
+            h-[38px]
+            items-center
+            rounded-[10px]
+            px-[12px]
+            text-[14px]
+            font-[500]
+            text-[#1F1F1F]
+            transition-colors
+            hover:bg-[#F5F5F5]
+          "
         >
-          Open <ArrowRight size={14} />
+          View Assignment
         </Link>
-      </div>
 
+        <button
+          className="
+            flex
+            h-[38px]
+            w-full
+            items-center
+            rounded-[10px]
+            px-[12px]
+            text-left
+            text-[14px]
+            font-[500]
+            text-[#E5484D]
+            transition-colors
+            hover:bg-[#FFF1F1]
+          "
+        >
+          Delete
+        </button>
+      </div>
     </div>
   )
 }

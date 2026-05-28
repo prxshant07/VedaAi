@@ -42,38 +42,6 @@ export function Topbar({
 
         {/* Left */}
         <div className="min-w-0">
-
-          {pageTitle && (
-            <h1
-              className="
-                truncate
-                text-[14px]
-                font-[700]
-                leading-none
-                tracking-[-0.03em]
-                text-[#1F1F1F]
-                font-[family-name:var(--font-bricolage)]
-              "
-            >
-              {pageTitle}
-            </h1>
-          )}
-
-          {pageSubtitle && (
-            <p
-              className="
-                mt-1
-                truncate
-                text-[11px]
-                font-[400]
-                leading-none
-                text-[#7A7A7A]
-                font-[family-name:var(--font-bricolage)]
-              "
-            >
-              {pageSubtitle}
-            </p>
-          )}
         </div>
 
         {/* Right */}

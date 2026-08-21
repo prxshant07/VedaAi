@@ -1,4 +1,4 @@
-# VedaAi — AI Assessment Creator
+#AI Assessment Creator
 
 A production-grade, full-stack platform that uses AI to generate structured exam papers for educators. Built with Next.js, Express, MongoDB, Redis, BullMQ, and Socket.IO.
 
